@@ -6,3 +6,5 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
 
 USER $NB_UID
+
+RUN python -m pip install nbgitpuller
