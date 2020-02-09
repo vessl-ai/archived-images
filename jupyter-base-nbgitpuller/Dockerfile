@@ -1,4 +1,4 @@
-FROM gcr.io/savvy-kit-260206/aron-backend-kernel:jupyter-backend
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:jupyter-base
 
 USER root
 
