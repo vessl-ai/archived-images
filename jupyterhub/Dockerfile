@@ -4,6 +4,6 @@ USER root
 
 RUN pip3 uninstall -y jupyterhub-kubespawner
 RUN pip3 install git+https://github.com/savvi-ai/kubespawner@custom
-RUN pip3 install jupyterhub-jwtauthenticator-v2
+RUN pip3 install git+https://github.com/savvi-ai/jwtauthenticator_v2@6b70d47aab9a8318475ac2c45a68763efb5e33f1
 
 USER jovyan
