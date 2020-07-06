@@ -27,4 +27,6 @@ python deploy.py --dir python --tag py36-ubuntu18.04 --push
 | Tensorflow   | `aron-backend-kernel/tf1.14-cpu` | 1.14    |
 
 ## MXNet
-* GPU
+| Framework    | Image Tag                            | Version | 
+|--------------|--------------------------------------|---------|
+| MXNet        | `aron-backend-kernel/mxnet1.6.0-cpu` | 1.6.0   |
