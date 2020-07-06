@@ -16,13 +16,15 @@ python deploy.py --dir python --tag py36-ubuntu18.04 --push
 ```
 
 ## PyTorch
-| Framework | Image Tag                              | Version | 
-|-----------|----------------------------------------|---------|
-| PyTorch   | `aron-backend-kernel/torch0.4-cpu`     | 0.4     |
+| Framework | Image Tag                          | Version | 
+|-----------|------------------------------------|---------|
+| PyTorch   | `aron-backend-kernel/torch0.4-cpu` | 0.4     |
 
 
 ## Tensorflow
-* CPU/GPU
+| Framework    | Image Tag                        | Version | 
+|--------------|----------------------------------|---------|
+| Tensorflow   | `aron-backend-kernel/tf1.14-cpu` | 1.14    |
 
 ## MXNet
 * GPU

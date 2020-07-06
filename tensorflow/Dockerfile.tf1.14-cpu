@@ -1,0 +1,22 @@
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-ubuntu18.04
+
+MAINTAINER floyd@savvihub.com
+
+ENV JUPYTER_ENABLE_LAB=TRUE
+ENV TF_VERSION 1.14
+
+USER root
+
+# Install pip package dependencies
+RUN python3 -m pip install --no-cache-dir "numpy<1.17" \
+    tensorflow==$TF_VERSION
+
+# Install ipython kernelspec
+RUN python -m ipykernel install --display-name "Tensorflow 1.14 on Python 3.6 (CPU-only)" && \
+    cat /usr/local/share/jupyter/kernels/python3/kernel.json
+
+USER $NB_UID
+WORKDIR $HOME
+
+COPY start-notebook.sh /usr/local/bin/
+CMD ["start-notebook.sh"]
