@@ -1,0 +1,18 @@
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-ubuntu18.04
+
+MAINTAINER floyd@savvihub.com
+
+USER root
+
+# Install torch and torchvision
+RUN python -m pip install --no-cache-dir \
+    https://download.pytorch.org/whl/cpu/torch-0.4.1-cp36-cp36m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/torchvision-0.2.0-py2.py3-none-any.whl && \
+    rm -rf /root/.cache
+
+# Install ipython kernelspec
+RUN python -m ipykernel install --display-name "PyTorch 0.4 on Python 3.6 (CPU-only)" && \
+    cat /usr/local/share/jupyter/kernels/python3/kernel.json
+
+USER $NB_UID
+WORKDIR $HOME
