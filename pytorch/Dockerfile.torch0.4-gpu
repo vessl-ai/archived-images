@@ -93,8 +93,6 @@ RUN mkdir /home/$NB_USER/work && \
 USER root
 RUN fix-permissions /usr/local/bin/jupyter
 
-USER root
-
 # Install CUDA-9.2.148 + cuDNN 7.6.5.32
 RUN ln -s /usr/local/cuda-9.2 /usr/local/cuda && \
     ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.7.6.5 /usr/local/cuda/lib64/libcudnn.so && \
