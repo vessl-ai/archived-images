@@ -11,7 +11,7 @@ ENV LANG=C.UTF-8
 ENV CUDA_VERSION 9.2.148
 ENV CUDA_PKG_VERSION9-2=$CUDA_VERSION-1
 ENV CUDNN_VERSION=7.6.5.32
-ENV NCCL_VERSION=2.4.2
+ENV NCCL_VERSION=2.4.2-1+cuda9.2
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/nvidia/lib64" \
     PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -100,7 +100,7 @@ RUN ln -s /usr/local/cuda-9.2 /usr/local/cuda && \
 RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades --allow-change-held-packages \
         cuda-libraries-$CUDA_PKG_VERSION \
         cuda-cublas-9-2=9.2.148.1-1 \
-        libnccl2=$NCCL_VERSION-1+cuda9.2 && \
+        libnccl2=$NCCL_VERSION && \
     apt-mark hold libnccl2 && \
     rm -rf /var/lib/apt/lists/*
 

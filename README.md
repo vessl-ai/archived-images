@@ -26,6 +26,7 @@ python deploy.py --dir python --tag py36-ubuntu18.04 --push
 | Framework    | Image Tag                        | Version | 
 |--------------|----------------------------------|---------|
 | Tensorflow   | `aron-backend-kernel/tf1.14-cpu` | 1.14    |
+| Tensorflow   | `aron-backend-kernel/tf1.14-gpu` | 1.14    |
 
 ## MXNet
 | Framework    | Image Tag                            | Version | 
