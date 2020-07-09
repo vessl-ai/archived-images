@@ -12,14 +12,13 @@ RUN python3 -m pip install --no-cache-dir --upgrade \
     tensor2tensor==1.15.7 \
     tensorwatch==0.9.1
 
-RUN python3 -m pip install --no-cache-dir wheel /tmp/*.whl && \
+RUN python3 -m pip install --no-cache-dir wheel && \
     python3 -m pip install --no-cache-dir keras && \
     python3 -m pip install --no-cache-dir keras_applications && \
     python3 -m pip install --no-cache-dir keras_preprocessing && \
     python3 -m pip install --no-cache-dir tensorflow-hub==0.5.0 && \
     python3 -m pip install --no-cache-dir tf2onnx && \
-    rm -rf /root/.cache && \
-    rm -f /tmp/*.whl
+    rm -rf /root/.cache
 
 # Install ipython kernelspec
 RUN python -m ipykernel install --display-name "Tensorflow 2.2 on Python 3.6 (GPU)" && \
