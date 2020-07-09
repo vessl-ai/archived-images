@@ -16,6 +16,6 @@ RUN python -m ipykernel install --display-name "PyTorch 0.4 on Python 3.6 (GPU)"
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
 USER $NB_UID
-WORKDIR $HOME
+WORKDIR $HOME/work
 
 CMD ["start-notebook.sh"]
