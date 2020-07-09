@@ -1,0 +1,22 @@
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-ubuntu18.04
+
+ENV JUPYTER_ENABLE_LAB=TRUE
+ENV TORCH_VERSION=1.5.1
+ENV TORCHVISION_VERSION=0.6.1
+
+USER root
+
+# Install torch and torchvision
+RUN python -m pip install --no-cache-dir \
+    https://download.pytorch.org/whl/cpu/torch-${TORCH_VERSION}%2Bcpu-cp36-cp36m-linux_x86_64.whl
+    https://download.pytorch.org/whl/cpu/torchvision-${TORCHVISION_VERSION}%2Bcpu-cp36-cp36m-linux_x86_64.whl && \
+    rm -rf /root/.cache
+
+# Install ipython kernelspec
+RUN python -m ipykernel install --display-name "PyTorch 1.5.1 on Python 3.6 (CPU-only)" && \
+    cat /usr/local/share/jupyter/kernels/python3/kernel.json
+
+USER $NB_UID
+WORKDIR $HOME/work
+
+CMD ["start-notebook.sh"]

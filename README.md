@@ -16,10 +16,12 @@ python deploy.py --dir {DIRECTORY} --tag {TAG} --push
 | Python & Ubuntu & CUDA   | `aron-backend-kernel/py36-cuda10.1`    | 3.6 & 18.04 & 10.1   |
 
 ## PyTorch
-| Framework | Image Tag                          | Version | 
-|-----------|------------------------------------|---------|
-| PyTorch   | `aron-backend-kernel/torch0.4-cpu` | 0.4     |
-| PyTorch   | `aron-backend-kernel/torch0.4-gpu` | 0.4     |
+| Framework       | Image Tag                          | Version      | 
+|-----------------|------------------------------------|--------------|
+| PyTorch         | `aron-backend-kernel/torch0.4-cpu` | 0.4.1        |
+| PyTorch & CUDA  | `aron-backend-kernel/torch0.4-gpu` | 0.4.1 & 9.2  |
+| PyTorch         | `aron-backend-kernel/torch1.5-cpu` | 1.5.1        |
+| PyTorch & CUDA  | `aron-backend-kernel/torch1.5-gpu` | 1.5.1 & 10.1 |
 
 ## Tensorflow
 | Framework    | Image Tag                        | Version | 

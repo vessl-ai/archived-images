@@ -1,0 +1,29 @@
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.1
+
+ENV TORCH_VERSION=1.5.1
+ENV TORCHVISION_VERSION=0.6.1
+ENV TORCHAUDIO_VERSION=0.5.1
+ENV TORCHTEXT_VERSION=0.6.0
+ENV TENSORBOARDX_VERSION=1.9
+ENV DEBIAN_FRONTEND=noninteractive
+ENV mecab_dicdir /usr/local/lib/mecab/dic/mecab-ko-dic
+
+USER root
+
+# Install torch and torchvision
+RUN python -m pip install --no-cache-dir \
+    https://download.pytorch.org/whl/cu101/torch-${TORCH_VERSION}%2Bcu101-cp36-cp36m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/cu101/torch-${TORCHVISION_VERSION}%2Bcu101-cp36-cp36m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/torchaudio-${TORCHAUDIO_VERSION}-cp36-cp36m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/torchtext-${TORCHTEXT_VERSION}-py3-none-any.whl \
+    tensorboardX==${TENSORBOARDX_VERSION} && \
+    rm -rf /root/.cache
+
+# Install ipython kernelspec
+RUN python -m ipykernel install --display-name "PyTorch 1.5 on Python 3.6 (GPU)" && \
+    cat /usr/local/share/jupyter/kernels/python3/kernel.json
+
+USER $NB_UID
+WORKDIR $HOME/work
+
+CMD ["start-notebook.sh"]
