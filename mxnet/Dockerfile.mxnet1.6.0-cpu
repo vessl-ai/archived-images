@@ -16,7 +16,6 @@ RUN python -m ipykernel install --display-name "MXNet 1.6.0 on Python 3.6 (CPU-o
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
 USER $NB_UID
-WORKDIR $HOME
+WORKDIR $HOME/work
 
-COPY start-notebook.sh /usr/local/bin/
 CMD ["start-notebook.sh"]
