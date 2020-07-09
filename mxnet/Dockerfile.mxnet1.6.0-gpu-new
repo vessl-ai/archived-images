@@ -1,0 +1,17 @@
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36.cuda10.1
+
+ENV MXNET_VERSION=1.6.0
+
+USER root
+
+# Install pip package dependencies
+RUN python3 -m pip install --no-cache-dir --upgrade mxnet-cu101mkl==$MXNET_VERSION
+
+# Install ipython kernelspec
+RUN python -m ipykernel install --display-name "MXNet 1.6.0 on Python 3.6 (GPU)" && \
+    cat /usr/local/share/jupyter/kernels/python3/kernel.json
+
+USER $NB_UID
+WORKDIR $HOME/work
+
+CMD ["start-notebook.sh"]
