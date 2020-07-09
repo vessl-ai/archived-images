@@ -32,3 +32,4 @@ python deploy.py --dir python --tag py36-ubuntu18.04 --push
 | Framework    | Image Tag                            | Version | 
 |--------------|--------------------------------------|---------|
 | MXNet        | `aron-backend-kernel/mxnet1.6.0-cpu` | 1.6.0   |
+| MXNet        | `aron-backend-kernel/mxnet1.6.0-gpu` | 1.6.0   |
