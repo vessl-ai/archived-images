@@ -30,7 +30,7 @@ def docker_deploy(docker_dir, tag, push):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dir', type=str, default='python', help='local directory')
+    parser.add_argument('--dir', type=str, default='base', help='local directory')
     parser.add_argument('--tag', type=str, default='latest', help='tagging docker image')
     parser.add_argument('--push', default=False, action='store_true', help='Push to GCR T/F')
     return parser.parse_args()

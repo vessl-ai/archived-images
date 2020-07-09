@@ -1,0 +1,165 @@
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+
+MAINTAINER floyd@savvihub.com
+
+ARG NB_USER="savvi"
+ARG NB_UID="1000"
+ARG NB_GID="100"
+ENV JUPYTER_ENABLE_LAB=TRUE
+ENV LANG=C.UTF-8
+
+ARG CUDA=10.1
+ARG LIBNVINFER=6.0.1-1
+ARG LIBNVINFER_MAJOR_VERSION=6
+ARG CUDNN=7.6.5.32-1
+ENV CUBLAS_VERSION=10.2.1.243-1
+ENV CUDNN_VERSION=$CUDNN+cuda$CUDA
+ENV NCCL_VERSION=2.6.4-1+cuda$CUDA
+ENV PYTHON_VERSION=3.6
+ENV PYTHONUNBUFFERED=1 \
+    LD_LIBRARY_PATH="/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
+    PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/mecab"
+
+# Set default shell to /bin/bash
+SHELL ["/bin/bash", "-cu"]
+
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" && \
+    apt-get update -y && \
+    apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        wget curl  git-core\
+        vim-tiny zip unzip \
+        python$PYTHON_VERSION python$PYTHON_VERSION-dev python3-pip \
+        libexpat1 libbz2-dev libffi6 libsqlite3-0 liblzma5 zlib1g \
+    iputils-ping \
+        cuda-command-line-tools-${CUDA/./-} \
+        libcublas10=$CUBLAS_VERSION\
+        libcublas-dev=$CUBLAS_VERSION \
+        cuda-nvrtc-${CUDA/./-} \
+        cuda-nvrtc-dev-${CUDA/./-} \
+        cuda-cudart-dev-${CUDA/./-} \
+        cuda-cufft-dev-${CUDA/./-} \
+        cuda-curand-dev-${CUDA/./-} \
+        cuda-cusolver-dev-${CUDA/./-} \
+        cuda-cusparse-dev-${CUDA/./-} \
+        libcudnn7=${CUDNN}+cuda${CUDA} \
+    libcudnn7=$CUDNN_VERSION \
+        libcudnn7-dev=$CUDNN_VERSION \
+        libnccl2=$NCCL_VERSION \
+        libnccl-dev=$NCCL_VERSION \
+        libcurl3-dev \
+        libcurl3-dev \
+        libfreetype6-dev \
+        libhdf5-serial-dev \
+        libzmq3-dev \
+        libjpeg-dev \
+        libpng-dev \
+    libsm6 \
+	libxext6 \
+	libxrender-dev \
+	libcairo2-dev libgirepository1.0-dev pkg-config gir1.2-gtk-3.0 \
+        libgeos-dev libgeos++-dev \
+        pkg-config \
+        zlib1g-dev \
+	libmpdec2 \
+        libssl1.0.0 \
+	libssl-dev \
+        libncursesw5 libtinfo5 \
+	proj-bin \
+        libgeos-dev \
+        mime-support \
+        sudo \
+	gcc g++ \
+        libproj-dev libgeos-dev \
+        libzmq3-dev libuv1 && \
+    apt-get clean && \
+    find /usr/local/cuda-${CUDA}/lib64/ -type f -name 'lib*_static.a' -not -name 'libcudart_static.a' -delete && \
+    rm /usr/lib/x86_64-linux-gnu/libcudnn_static_v7.a && \
+    rm -rf /var/lib/apt/lists/
+
+RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
+    && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
+    && ldconfig
+
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
+    python3 -m pip install --no-cache-dir -U setuptools && \
+    python3 -m pip install --no-cache-dir h5py && \
+    python3 -m pip install --no-cache-dir Cython && \
+    python3 -m pip install --no-cache-dir matplotlib bokeh && \
+    python3 -m pip install --no-cache-dir versioneer==0.17 && \
+    python3 -m pip install --no-cache-dir pyproj Cartopy==0.16 && \
+    python3 -m pip install --no-cache-dir pandas && \
+    python3 -m pip install --no-cache-dir seaborn && \
+    python3 -m pip install --no-cache-dir pillow && \
+    python3 -m pip install --no-cache-dir networkx cvxpy && \
+    python3 -m pip install --no-cache-dir scikit-learn scikit-image && \
+    python3 -m pip install --no-cache-dir pygments && \
+    python3 -m pip install --no-cache-dir tqdm && \
+    python3 -m pip install --no-cache-dir ipython && \
+    python3 -m pip install --no-cache-dir jupyter && \
+    python3 -m pip install --no-cache-dir jupyterlab && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+
+RUN export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH
+
+# Configure environment
+ENV NB_USER=$NB_USER \
+    NB_UID=$NB_UID \
+    NB_GID=$NB_GID
+ENV HOME=/home/$NB_USER
+ENV PATH=$HOME/.local/bin:$PATH
+
+# Copy a script that we will use to correct permissions after running certain commands
+COPY fix-permissions /usr/local/bin/fix-permissions
+RUN chmod a+rx /usr/local/bin/fix-permissions
+
+# Create NB_USER wtih name jovyan user with UID=1000 and in the 'users' group
+# and make sure these dirs are writable by the `users` group.
+RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
+    sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
+    sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
+    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    chmod g+w /etc/passwd && \
+    fix-permissions $HOME
+
+USER $NB_UID
+WORKDIR $HOME
+
+# Setup work directory for backward-compatibility
+RUN mkdir /home/$NB_USER/work && \
+    fix-permissions /home/$NB_USER
+
+# Fix permissions on /etc/jupyter as root
+USER root
+RUN fix-permissions /usr/local/bin/jupyter
+
+# Install CUDA-10.1 + cuDNN 7.6.0
+RUN ln -s /usr/local/cuda-$CUDA /usr/local/cuda && \
+    ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.7.6.0 /usr/local/cuda/lib64/libcudnn.so && \
+    ldconfig
+
+RUN apt-get update && \
+        apt-get install -y --no-install-recommends libnvinfer$LIBNVINFER_MAJOR_VERSION=$LIBNVINFER+cuda$CUDA \
+        libnvinfer-dev=${LIBNVINFER}+cuda${CUDA} \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    apt-get update -y && \
+    apt-get install -y nodejs proj-bin libproj-dev libgeos-dev libgeos++-dev graphviz
+
+RUN apt-get update && \
+        apt-get install -y --no-install-recommends libnvinfer${LIBNVINFER_MAJOR_VERSION}=${LIBNVINFER}+cuda${CUDA} \
+        libnvinfer-dev=${LIBNVINFER}+cuda${CUDA} \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+
+LABEL com.nvidia.cuda.version="10.1" \
+      com.nvidia.volumes.needed="nvidia_driver"
+
+COPY start-notebook.sh /usr/local/bin/

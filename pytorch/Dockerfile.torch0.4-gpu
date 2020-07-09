@@ -1,116 +1,14 @@
-FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda9.2
 
-MAINTAINER floyd@savvihub.com
+ENV TORCH_VERSION=0.4.1
+ENV TORCHVISION_VERSION=0.2.0
 
-ARG NB_USER="savvi"
-ARG NB_UID="1000"
-ARG NB_GID="100"
-
-ENV JUPYTER_ENABLE_LAB=TRUE
-ENV LANG=C.UTF-8
-ENV CUDA_VERSION 9.2.148
-ENV CUDA_PKG_VERSION9-2=$CUDA_VERSION-1
-ENV CUDNN_VERSION=7.6.5.32
-ENV NCCL_VERSION=2.4.2-1+cuda9.2
-ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/nvidia/lib64" \
-    PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-RUN apt-get update && \
-    apt-get install -y \
-        ca-certificates \
-        wget curl  git-core\
-        vim-tiny zip unzip \
-        python3 python3-pip \
-        libexpat1 libbz2-dev libffi6 libsqlite3-0 liblzma5 zlib1g \
-	libmpdec2 \
-        libssl1.0.0 \
-	libssl-dev \
-        libncursesw5 libtinfo5 \
-	proj-bin \
-        libgeos-dev \
-        mime-support \
-        sudo \
-	gcc g++ \
-        libproj-dev libgeos-dev \
-        libzmq3-dev libuv1 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/
-
-ENV PYTHONUNBUFFERED 1
-
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
-    python3 -m pip install --no-cache-dir -U setuptools && \
-    python3 -m pip install --no-cache-dir h5py && \
-    python3 -m pip install --no-cache-dir Cython && \
-    python3 -m pip install --no-cache-dir matplotlib bokeh && \
-    python3 -m pip install --no-cache-dir versioneer==0.17 && \
-    python3 -m pip install --no-cache-dir pyproj Cartopy==0.16 && \
-    python3 -m pip install --no-cache-dir pandas && \
-    python3 -m pip install --no-cache-dir seaborn && \
-    python3 -m pip install --no-cache-dir pillow && \
-    python3 -m pip install --no-cache-dir networkx cvxpy && \
-    python3 -m pip install --no-cache-dir scikit-learn scikit-image && \
-    python3 -m pip install --no-cache-dir pygments && \
-    python3 -m pip install --no-cache-dir tqdm && \
-    python3 -m pip install --no-cache-dir ipython && \
-    python3 -m pip install --no-cache-dir jupyter && \
-    python3 -m pip install --no-cache-dir jupyterlab && \
-    rm -rf /root/.cache && \
-    rm -f /tmp/*.whl
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
-
-RUN export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH
-
-# Configure environment
-ENV SHELL=/bin/bash \
-    NB_USER=$NB_USER \
-    NB_UID=$NB_UID \
-    NB_GID=$NB_GID
-ENV HOME=/home/$NB_USER
-ENV PATH=$HOME/.local/bin:$PATH
-
-# Copy a script that we will use to correct permissions after running certain commands
-COPY fix-permissions /usr/local/bin/fix-permissions
-RUN chmod a+rx /usr/local/bin/fix-permissions
-
-# Create NB_USER wtih name jovyan user with UID=1000 and in the 'users' group
-# and make sure these dirs are writable by the `users` group.
-RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
-    sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
-    sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
-    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
-    chmod g+w /etc/passwd && \
-    fix-permissions $HOME
-
-USER $NB_UID
-WORKDIR $HOME
-
-# Setup work directory for backward-compatibility
-RUN mkdir /home/$NB_USER/work && \
-    fix-permissions /home/$NB_USER
-
-# Fix permissions on /etc/jupyter as root
 USER root
-RUN fix-permissions /usr/local/bin/jupyter
-
-# Install CUDA-9.2.148 + cuDNN 7.6.5.32
-RUN ln -s /usr/local/cuda-9.2 /usr/local/cuda && \
-    ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.7.6.5 /usr/local/cuda/lib64/libcudnn.so && \
-    ldconfig
-RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades --allow-change-held-packages \
-        cuda-libraries-$CUDA_PKG_VERSION \
-        cuda-cublas-9-2=9.2.148.1-1 \
-        libnccl2=$NCCL_VERSION && \
-    apt-mark hold libnccl2 && \
-    rm -rf /var/lib/apt/lists/*
-
-LABEL com.nvidia.cuda.version="9.2.148" \
-      com.nvidia.volumes.needed="nvidia_driver"
 
 # Install torch and torchvision
 RUN python -m pip install --no-cache-dir \
-    https://download.pytorch.org/whl/cu90/torch-0.4.1-cp36-cp36m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/torchvision-0.2.0-py2.py3-none-any.whl && \
+    https://download.pytorch.org/whl/cu90/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/torchvision-${TORCHVISION_VERSION}-py2.py3-none-any.whl && \
     rm -rf /root/.cache
 
 # Install ipython kernelspec
@@ -118,7 +16,6 @@ RUN python -m ipykernel install --display-name "PyTorch 0.4 on Python 3.6 (GPU)"
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
 USER $NB_UID
-WORKDIR $HOME
+WORKDIR $HOME/work
 
-COPY start-notebook.sh /usr/local/bin/
 CMD ["start-notebook.sh"]

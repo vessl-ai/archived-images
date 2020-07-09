@@ -6,6 +6,7 @@ spec:
   containers:
   - name: tf-gpu-container
     image: gcr.io/savvy-kit-260206/aron-backend-kernel:tf1.14-gpu
+    imagePullPolicy: Always
     resources:
       limits:
         nvidia.com/gpu: 1
