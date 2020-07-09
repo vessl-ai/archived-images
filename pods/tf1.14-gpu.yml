@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tf-gpu-pod
+spec:
+  containers:
+  - name: tf-gpu-container
+    image: gcr.io/savvy-kit-260206/aron-backend-kernel:tf1.14-gpu
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+  nodeSelector:
+    cloud.google.com/gke-accelerator: nvidia-tesla-k80
+  imagePullSecrets:
+    - name: gcr-registry
