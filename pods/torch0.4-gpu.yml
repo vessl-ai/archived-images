@@ -6,6 +6,7 @@ spec:
   containers:
   - name: torch-gpu-container
     image: gcr.io/savvy-kit-260206/aron-backend-kernel:torch0.4-gpu
+    imagePullPolicy: Always
     resources:
       limits:
         nvidia.com/gpu: 1
