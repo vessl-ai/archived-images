@@ -36,3 +36,9 @@ python deploy.py --dir {DIRECTORY} --tag {TAG} --push
 |--------------|--------------------------------------|---------------|
 | MXNet        | `aron-backend-kernel/mxnet1.6.0-cpu` | 1.6.0         |
 | MXNet & CUDA | `aron-backend-kernel/mxnet1.6.0-gpu` | 1.6.0 & 10.1  |
+
+## Full
+| Framework                         | Image Tag                      | Version                   | 
+|-----------------------------------|--------------------------------|---------------------------|
+| PyTorch, Tensorflow, MXNet        | `aron-backend-kernel/full-cpu` | 1.5.1, 2.2, 1.6.0         |
+| PyTorch, Tensorflow, MXNet & CUDA | `aron-backend-kernel/full-gpu` | 1.5.1, 2.2, 1.6.0 & 10.1  |
