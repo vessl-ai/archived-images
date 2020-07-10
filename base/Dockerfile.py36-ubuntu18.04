@@ -82,7 +82,4 @@ RUN mkdir /home/$NB_USER/work && \
 USER root
 RUN fix-permissions /usr/local/bin/jupyter
 
-# Switch back to jovyan to avoid accidental container runs as root
-USER $NB_UID
-WORKDIR $HOME
-
+COPY start-notebook.sh /usr/local/bin/
