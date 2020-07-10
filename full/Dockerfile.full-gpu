@@ -28,7 +28,10 @@ RUN python3 -m pip install --no-cache-dir wheel && \
     https://download.pytorch.org/whl/torchtext-${TORCHTEXT_VERSION}-py3-none-any.whl \
     tensorboardX==${TENSORBOARDX_VERSION} \
     keras keras_applications keras_preprocessing \
-    tensorflow-hub==0.5.0 tf2onnx && \
+    tensorflow-hub==0.5.0 tf2onnx \
+    "typing-extensions>=3.7.4" \
+    "typing<=3.6.6" \
+    "urllib3<1.25,>=1.21.1" && \
     rm -rf /root/.cache
 
 # Install more pip dependencies

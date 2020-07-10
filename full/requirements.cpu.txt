@@ -64,7 +64,7 @@ filelock==3.0.12
 firebase-admin==4.1.0
 fix-yahoo-finance==0.0.22
 Flask==1.1.2
-folium==0.8.3
+folium==0.2.1
 fsspec==0.7.4
 gdown==3.6.4
 gensim==3.6.0
@@ -83,7 +83,6 @@ google-cloud-firestore==1.7.0
 google-cloud-language==1.2.0
 google-cloud-storage==1.18.1
 google-cloud-translate==1.5.0
-google-colab==1.0.0
 google-resumable-media==0.4.1
 googleapis-common-protos==1.52.0
 googledrivedownloader==0.4
@@ -103,7 +102,7 @@ image==1.5.32
 imagesize==1.2.0
 imbalanced-learn==0.4.3
 imblearn==0.0
-imgaug==0.2.9
+imgaug<0.2.7,>=0.2.5
 imutils==0.5.3
 inflect==2.1.0
 intel-openmp==2020.0.133
@@ -236,7 +235,6 @@ torchsummary==1.5.1
 torchtext==0.3.1
 tweepy==3.6.0
 typeguard==2.7.1
-typing==3.6.6
 tzlocal==1.5.1
 umap-learn==0.4.4
 uritemplate==3.0.1

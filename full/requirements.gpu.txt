@@ -84,7 +84,6 @@ google-cloud-firestore==1.7.0
 google-cloud-language==1.2.0
 google-cloud-storage==1.18.1
 google-cloud-translate==1.5.0
-google-colab==1.0.0
 google-resumable-media==0.4.1
 googleapis-common-protos==1.52.0
 googledrivedownloader==0.4
@@ -237,7 +236,6 @@ torchsummary==1.5.1
 torchtext==0.3.1
 tweepy==3.6.0
 typeguard==2.7.1
-typing==3.6.6
 tzlocal==1.5.1
 umap-learn==0.4.4
 uritemplate==3.0.1
