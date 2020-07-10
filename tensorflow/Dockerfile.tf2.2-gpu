@@ -1,4 +1,4 @@
-FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.0
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.1
 
 ENV TF_VERSION 2.2
 
