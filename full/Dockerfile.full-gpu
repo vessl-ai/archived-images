@@ -19,7 +19,12 @@ RUN python3 -m pip install --no-cache-dir wheel && \
     "typing-extensions>=3.7.4" \
     "typing<=3.6.6" \
     "urllib3<1.25,>=1.21.1" \
-    mxnet-cu101mkl==$MXNET_VERSION \
+    "tensorflow-probability==0.7.0" \
+    "imgaug<0.2.7,>=0.2.5" \
+    "folium==0.2.1"
+
+RUN python3 -m pip install --no-cache-dir \
+	mxnet-cu101mkl==$MXNET_VERSION \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     ngraph-tensorflow-bridge \
