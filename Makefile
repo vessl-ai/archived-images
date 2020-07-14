@@ -46,11 +46,8 @@ push-mxnet:
 	python deploy.py --dir mxnet --tag 1.6.0-cpu --push
 	python deploy.py --dir mxnet --tag 1.6.0-gpu --push
 
-push-ff:
+push-full:
 	python deploy.py --dir full --tag full-cpu --push
 	python deploy.py --dir full --tag full-gpu --push
 
-push-all: push-base
-	push-torch
-	push-tf
-	push-mxnet
+push-all: push-base push-torch push-tf push-mxnet push-full
