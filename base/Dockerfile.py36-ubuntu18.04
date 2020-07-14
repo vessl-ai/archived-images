@@ -78,11 +78,6 @@ WORKDIR $HOME
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
-# Add custom python packages path
-RUN mkdir /home/$NB_USER/packages
-ENV PIP_TARGET=/home/$NB_USER/packages
-ENV PYTHONPATH=$PYTHONPATH:/home/$NB_USER/packages
-
 # Fix permissions on /etc/jupyter as root
 USER root
 RUN fix-permissions /usr/local/bin/jupyter
