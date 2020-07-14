@@ -50,8 +50,7 @@ push-ff:
 	python deploy.py --dir full --tag full-cpu --push
 	python deploy.py --dir full --tag full-gpu --push
 
-push-all:
-	push-base
+push-all: push-base
 	push-torch
 	push-tf
 	push-mxnet
