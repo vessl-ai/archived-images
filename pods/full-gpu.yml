@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: torch-gpu-pod
+  name: full-gpu-pod
 spec:
   containers:
-  - name: torch-gpu-container
+  - name: full-gpu-container
     image: gcr.io/savvy-kit-260206/aron-backend-kernel:full-gpu
     imagePullPolicy: Always
     resources:
