@@ -27,7 +27,7 @@ push-cuda10.1:
 push-base:
 	python deploy.py --dir base --tag py36-ubuntu18.04 --push
 	python deploy.py --dir base --tag py36-cuda9.2 --push
-	python deploy.py --dir base --tag py36-cuda10.0--push
+	python deploy.py --dir base --tag py36-cuda10.0 --push
 	python deploy.py --dir base --tag py36-cuda10.1 --push
 
 push-torch:
@@ -43,8 +43,8 @@ push-tf:
 	python deploy.py --dir tensorflow --tag tf2.2-gpu --push
 
 push-mxnet:
-	python deploy.py --dir mxnet --tag 1.6.0-cpu --push
-	python deploy.py --dir mxnet --tag 1.6.0-gpu --push
+	python deploy.py --dir mxnet --tag mxnet1.6.0-cpu --push
+	python deploy.py --dir mxnet --tag mxnet1.6.0-gpu --push
 
 push-full:
 	python deploy.py --dir full --tag full-cpu --push

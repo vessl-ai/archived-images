@@ -3,10 +3,15 @@ kind: Pod
 metadata:
   name: full-gpu-pod
 spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 100
   containers:
   - name: full-gpu-container
     image: gcr.io/savvy-kit-260206/aron-backend-kernel:full-gpu
     imagePullPolicy: Always
+    securityContext:
+      allowPrivilegeEscalation: false
     resources:
       limits:
         nvidia.com/gpu: 1
