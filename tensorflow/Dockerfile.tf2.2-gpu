@@ -20,6 +20,9 @@ RUN python3 -m pip install --no-cache-dir wheel && \
     python3 -m pip install --no-cache-dir tf2onnx && \
     rm -rf /root/.cache
 
+# Reinstall for ipykernel compatibility
+RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
+
 # Install ipython kernelspec
 RUN python -m ipykernel install --display-name "Tensorflow 2.2 on Python 3.6 (GPU)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json

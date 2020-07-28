@@ -14,6 +14,9 @@ RUN python -m pip install --no-cache-dir \
     https://download.pytorch.org/whl/torchvision-${TORCHVISION_VERSION}-py2.py3-none-any.whl && \
     rm -rf /root/.cache
 
+# Reinstall for ipykernel compatibility
+RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
+
 # Install ipython kernelspec
 RUN python -m ipykernel install --display-name "PyTorch 0.4 on Python 3.6 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json

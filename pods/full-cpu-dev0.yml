@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: full-cpu-dev0-pod
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 100
+  containers:
+  - name: full-cpu-container
+    image: gcr.io/savvy-kit-260206/aron-backend-kernel:full-cpu-dev0
+    imagePullPolicy: Always
+    securityContext:
+      allowPrivilegeEscalation: false
+  imagePullSecrets:
+    - name: gcr-registry

@@ -11,6 +11,9 @@ USER root
 RUN python3 -m pip install --no-cache-dir "numpy>1.16.0"
 RUN python3 -m pip install --no-cache-dir mxnet==$MXNET_VERSION
 
+# Reinstall for ipykernel compatibility
+RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
+
 # Install ipython kernelspec
 RUN python -m ipykernel install --display-name "MXNet 1.6.0 on Python 3.6 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json

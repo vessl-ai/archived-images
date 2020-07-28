@@ -28,6 +28,9 @@ RUN python3 -m pip install --no-cache-dir wheel && \
 COPY requirements.cpu.txt requirements.txt
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
+# Reinstall for ipykernel compatibility
+RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
+
 # Install ipython kernelspec
 RUN python -m ipykernel install --display-name "Full on Python 3.6 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
