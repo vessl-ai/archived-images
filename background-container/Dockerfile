@@ -1,4 +1,4 @@
-FROM savvihub/system-metrics-collector:0.1 AS system-metrics-collector
+FROM savvihub/system-metrics-collector:0.2 AS system-metrics-collector
 FROM savvihub/client
 
 COPY --from=system-metrics-collector /app/system-metrics-collector /usr/local/bin/
