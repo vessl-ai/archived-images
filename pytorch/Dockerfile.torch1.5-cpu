@@ -22,9 +22,4 @@ RUN python -m ipykernel install --display-name "PyTorch 1.5.1 on Python 3.6 (CPU
 USER $NB_UID
 WORKDIR $HOME/work
 
-# Add custom python packages path
-RUN mkdir $HOME/packages
-ENV PIP_TARGET=$HOME/packages
-ENV PYTHONPATH=$PYTHONPATH:$HOME/packages
-
 CMD ["start-notebook.sh"]
