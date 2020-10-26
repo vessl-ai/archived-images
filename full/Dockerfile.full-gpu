@@ -15,14 +15,11 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
-RUN python3 -m pip install --no-cache-dir wheel && \
-    python3 -m pip install --no-cache-dir \
+RUN python3 -m pip install --no-cache-dir --use-feature=2020-resolver wheel && \
+    python3 -m pip install --no-cache-dir --use-feature=2020-resolver \
     "typing-extensions>=3.7.4" \
     "typing<=3.6.6" \
-    "urllib3<1.25,>=1.21.1" \
-    "tensorflow-probability==0.7.0" \
-    "imgaug<0.2.7,>=0.2.5" \
-    "folium==0.2.1"
+    "urllib3<1.25,>=1.21.1"
 
 RUN apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends wget
 
@@ -31,7 +28,6 @@ RUN python3 -m pip install --no-cache-dir \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     ngraph-tensorflow-bridge \
-    tensor2tensor==1.15.7 \
     tensorwatch==0.9.1 \
     https://download.pytorch.org/whl/cu101/torch-${TORCH_VERSION}%2Bcu101-cp36-cp36m-linux_x86_64.whl \
     https://download.pytorch.org/whl/cu101/torchvision-${TORCHVISION_VERSION}%2Bcu101-cp36-cp36m-linux_x86_64.whl \

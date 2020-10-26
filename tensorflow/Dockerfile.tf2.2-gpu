@@ -6,7 +6,7 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
-RUN python3 -m pip install --no-cache-dir --upgrade \
+RUN python3 -m pip install --no-cache-dir --upgrade --use-feature=2020-resolver \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     ngraph-tensorflow-bridge \

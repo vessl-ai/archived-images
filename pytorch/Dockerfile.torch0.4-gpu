@@ -7,7 +7,7 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install torch and torchvision
-RUN python -m pip install --no-cache-dir \
+RUN python -m pip install --no-cache-dir --use-feature=2020-resolver \
     https://download.pytorch.org/whl/cu90/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl \
     https://download.pytorch.org/whl/torchvision-${TORCHVISION_VERSION}-py2.py3-none-any.whl && \
     rm -rf /root/.cache

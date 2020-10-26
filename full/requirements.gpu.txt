@@ -1,5 +1,4 @@
 alabaster==0.7.12
-albumentations==0.1.12
 altair==4.1.0
 asgiref==3.2.10
 astor==0.8.1
@@ -40,7 +39,6 @@ Cython==0.29.20
 daft==0.0.4
 dask==2.12.0
 dataclasses==0.7
-datascience==0.10.6
 descartes==1.1.0
 dill==0.3.2
 distributed==1.25.3

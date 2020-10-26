@@ -9,7 +9,7 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
-RUN python3 -m pip install --no-cache-dir \
+RUN python3 -m pip install --no-cache-dir --use-feature=2020-resolver \
     tensorflow==$TF_VERSION
 
 # Reinstall for ipykernel compatibility
