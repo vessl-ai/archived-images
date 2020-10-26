@@ -4,6 +4,7 @@ ENV TORCH_VERSION=0.4.1
 ENV TORCHVISION_VERSION=0.2.0
 
 USER root
+RUN python3 -m pip install --upgrade pip
 
 # Install torch and torchvision
 RUN python -m pip install --no-cache-dir \

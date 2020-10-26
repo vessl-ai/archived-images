@@ -9,6 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV mecab_dicdir /usr/local/lib/mecab/dic/mecab-ko-dic
 
 USER root
+RUN python3 -m pip install --upgrade pip
 
 # Install torch and torchvision
 RUN python -m pip install --no-cache-dir \

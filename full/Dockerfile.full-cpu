@@ -3,12 +3,13 @@ FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-ubuntu18.04
 MAINTAINER floyd@savvihub.com
 
 ENV JUPYTER_ENABLE_LAB=TRUE
-ENV MXNET_VERSION 1.6.0
+ENV MXNET_VERSION 1.6.0.post0
 ENV TF_VERSION 2.2.0
 ENV TORCH_VERSION=1.5.1
 ENV TORCHVISION_VERSION=0.6.1
 
 USER root
+RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
 RUN python3 -m pip install --no-cache-dir wheel && \
