@@ -35,6 +35,8 @@ push-torch:
 	python deploy.py --dir pytorch --tag torch0.4-gpu --push
 	python deploy.py --dir pytorch --tag torch1.5-cpu --push
 	python deploy.py --dir pytorch --tag torch1.5-gpu --push
+	python deploy.py --dir pytorch --tag torch1.6-cpu --push
+	python deploy.py --dir pytorch --tag torch1.6-gpu --push
 
 push-tf:
 	python deploy.py --dir tensorflow --tag tf1.14-cpu --push

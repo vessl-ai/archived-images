@@ -22,6 +22,8 @@ python deploy.py --dir {DIRECTORY} --tag {TAG} --push
 | PyTorch & CUDA  | `aron-backend-kernel/torch0.4-gpu` | 0.4.1 & 9.2  |
 | PyTorch         | `aron-backend-kernel/torch1.5-cpu` | 1.5.1        |
 | PyTorch & CUDA  | `aron-backend-kernel/torch1.5-gpu` | 1.5.1 & 10.1 |
+| PyTorch         | `aron-backend-kernel/torch1.6-cpu` | 1.6.0        |
+| PyTorch & CUDA  | `aron-backend-kernel/torch1.5-gpu` | 1.6.0 & 10.1 |
 
 ## Tensorflow
 | Framework          | Image Tag                        | Version      | 
@@ -40,5 +42,5 @@ python deploy.py --dir {DIRECTORY} --tag {TAG} --push
 ## Full
 | Framework                         | Image Tag                      | Version                   | 
 |-----------------------------------|--------------------------------|---------------------------|
-| PyTorch, Tensorflow, MXNet        | `aron-backend-kernel/full-cpu` | 1.5.1, 2.2, 1.6.0         |
-| PyTorch, Tensorflow, MXNet & CUDA | `aron-backend-kernel/full-gpu` | 1.5.1, 2.2, 1.6.0 & 10.1  |
+| PyTorch, Tensorflow, MXNet        | `aron-backend-kernel/full-cpu` | 1.6.0, 2.2, 1.6.0         |
+| PyTorch, Tensorflow, MXNet & CUDA | `aron-backend-kernel/full-gpu` | 1.6.0, 2.2, 1.6.0 & 10.1  |
