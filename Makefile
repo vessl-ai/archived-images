@@ -40,7 +40,7 @@ push-torch:
 
 push-tf:
 	python deploy.py --dir tensorflow --tag tf1.14-cpu --push
-	python deploy.py --dir tensorflow --tag tf1.14-gpu --push
+	python deploy.py --dir tensorflow --tag tf1.15-gpu --push
 	python deploy.py --dir tensorflow --tag tf2.2-cpu --push
 	python deploy.py --dir tensorflow --tag tf2.2-gpu --push
 

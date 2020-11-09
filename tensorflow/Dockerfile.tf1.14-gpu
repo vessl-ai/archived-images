@@ -7,11 +7,9 @@ RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
 RUN python3 -m pip install --no-cache-dir --upgrade --use-feature=2020-resolver \
-    "numpy<1.17" \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     ngraph-tensorflow-bridge \
-    tensor2tensor==$TF_VERSION.1 \
     tensorwatch==0.8.10
 
 # Reinstall for ipykernel compatibility

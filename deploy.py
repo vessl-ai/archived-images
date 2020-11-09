@@ -2,9 +2,10 @@ import argparse
 import subprocess
 from pathlib import Path
 
-GCR_ADDRESS = 'gcr.io/savvy-kit-260206'
-DOCKER_NAME = 'aron-backend-kernel'
-
+# GCR_ADDRESS = 'gcr.io/savvy-kit-260206'
+# DOCKER_NAME = 'aron-backend-kernel'
+GCR_ADDRESS = 'savvihub'
+DOCKER_NAME = 'kernels'
 
 def run(cmd):
     return subprocess.run(cmd, shell=True, check=True)
