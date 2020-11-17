@@ -1,4 +1,4 @@
-FROM savvihub/system-metrics-collector:0.2 AS system-metrics-collector
+FROM savvihub/system-metrics-collector:0.3 AS system-metrics-collector
 FROM python:3.8.3-slim
 
 COPY --from=system-metrics-collector /app/system-metrics-collector /usr/local/bin/
@@ -12,6 +12,6 @@ RUN chmod +x ./kubectl
 
 RUN mv ./kubectl /usr/local/bin/kubectl
 
-RUN pip install savvihub
+RUN pip install savvihub==0.0.25-dev3
 
 ENTRYPOINT ["/bin/sh"]
