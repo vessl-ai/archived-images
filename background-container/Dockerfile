@@ -1,5 +1,5 @@
-FROM savvihub/system-metrics-collector:0.4.2 AS system-metrics-collector
-FROM python:3.8.3-slim
+FROM savvihub/system-metrics-collector:0.5 AS system-metrics-collector
+FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.1
 
 COPY --from=system-metrics-collector /app/system-metrics-collector /usr/local/bin/
 
