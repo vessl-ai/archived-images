@@ -1,4 +1,4 @@
-FROM savvihub/system-metrics-collector:0.5.3 AS system-metrics-collector
+FROM savvihub/system-metrics-collector:0.5.4 AS system-metrics-collector
 FROM python:3.8.3-slim
 
 COPY --from=system-metrics-collector /app/system-metrics-collector /usr/local/bin/
