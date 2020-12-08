@@ -12,6 +12,6 @@ RUN chmod +x ./kubectl
 
 RUN mv ./kubectl /usr/local/bin/kubectl
 
-RUN pip install savvihub==0.0.43
+RUN pip install savvihub==0.0.44
 
 ENTRYPOINT ["/bin/sh"]
