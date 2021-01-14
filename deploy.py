@@ -7,6 +7,7 @@ from pathlib import Path
 GCR_ADDRESS = 'savvihub'
 DOCKER_NAME = 'kernels'
 
+
 def run(cmd):
     return subprocess.run(cmd, shell=True, check=True)
 
