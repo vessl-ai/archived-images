@@ -2,9 +2,9 @@ import argparse
 import subprocess
 from pathlib import Path
 
-# GCR_ADDRESS = 'gcr.io/savvy-kit-260206'
+# REGISTRY_ADDRESS = 'gcr.io/savvy-kit-260206'
 # DOCKER_NAME = 'aron-backend-kernel'
-GCR_ADDRESS = 'savvihub'
+REGISTRY_ADDRESS = 'savvihub'
 DOCKER_NAME = 'kernels'
 
 
@@ -24,7 +24,7 @@ def docker_deploy(docker_dir, tag, push):
 
     print(f'Building {dockerfile_path}')
 
-    tag_ref = "{}/{}:{}".format(GCR_ADDRESS, DOCKER_NAME, tag)
+    tag_ref = "{}/{}:{}".format(REGISTRY_ADDRESS, DOCKER_NAME, tag)
     run(f'docker build -t {tag_ref} -f {dockerfile_path} {docker_dir}')
     if push:
         run(f'docker push {tag_ref}')

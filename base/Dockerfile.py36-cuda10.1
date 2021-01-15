@@ -3,8 +3,6 @@ FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 MAINTAINER floyd@savvihub.com
 
 ARG NB_USER="savvi"
-ARG NB_UID="1000"
-ARG NB_GID="100"
 ENV JUPYTER_ENABLE_LAB=TRUE
 ENV LANG=C.UTF-8
 
@@ -15,13 +13,14 @@ ARG CUDNN=7.6.5.32-1
 ENV CUBLAS_VERSION=10.2.1.243-1
 ENV CUDNN_VERSION=$CUDNN+cuda$CUDA
 ENV NCCL_VERSION=2.6.4-1+cuda$CUDA
+ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHON_VERSION=3.6
 ENV PYTHONUNBUFFERED=1 \
     LD_LIBRARY_PATH="/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
     PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/mecab"
 
 # Set default shell to /bin/bash
-SHELL ["/bin/bash", "-cu"]
+#SHELL ["/bin/bash", "-cu"]
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends software-properties-common && \
@@ -30,7 +29,7 @@ RUN apt-get update -y && \
     apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
         build-essential \
         ca-certificates \
-        wget curl  git-core\
+        wget curl git git-core\
         vim-tiny zip unzip \
         python$PYTHON_VERSION python$PYTHON_VERSION-dev python3-pip \
         libexpat1 libbz2-dev libffi6 libsqlite3-0 liblzma5 zlib1g \
@@ -84,25 +83,68 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
     && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
     && ldconfig
 
+RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
+  	bash ~/.bash_it/install.sh --silent
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+  	apt-get install -y nodejs  && \
+  	rm -rf /var/lib/apt/lists/*
+
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
-    python3 -m pip install --no-cache-dir -U setuptools && \
-    python3 -m pip install --no-cache-dir h5py && \
-    python3 -m pip install --no-cache-dir Cython && \
-    python3 -m pip install --no-cache-dir matplotlib && \
-    python3 -m pip install --no-cache-dir versioneer==0.17 && \
-    python3 -m pip install --no-cache-dir pyproj Cartopy==0.16 && \
-    python3 -m pip install --no-cache-dir pandas && \
-    python3 -m pip install --no-cache-dir seaborn && \
-    python3 -m pip install --no-cache-dir pillow && \
-    python3 -m pip install --no-cache-dir networkx cvxpy && \
-    python3 -m pip install --no-cache-dir scikit-learn scikit-image && \
-    python3 -m pip install --no-cache-dir pygments && \
-    python3 -m pip install --no-cache-dir tqdm && \
-    python3 -m pip install --no-cache-dir ipython && \
-    python3 -m pip install --no-cache-dir jupyter && \
-    python3 -m pip install --no-cache-dir jupyterlab && \
-    rm -rf /root/.cache && \
-    rm -f /tmp/*.whl
+  	pip install --upgrade pip && \
+  	pip install --upgrade Cython numpy
+
+RUN pip install --upgrade \
+		jupyterlab==1.2.6 \
+		ipywidgets \
+		plotly \
+		bokeh \
+		scipy \
+		numexpr \
+		patsy \
+		scikit-learn \
+		scikit-image \
+		matplotlib \
+		ipython \
+		pandas \
+		sympy \
+		seaborn \
+		nose \
+		jupyterlab-git==0.11.0 \
+		Cartopy==0.16 \
+		cvxpy \
+		h5py \
+		ipywidgets \
+		networkx \
+		numexpr \
+		pillow \
+		pygments \
+		tqdm && \
+  	jupyter labextension install \
+		@jupyterlab/git \
+		jupyterlab_tensorboard \
+	    @mflevine/jupyterlab_html \
+		jupyterlab-spreadsheet
+
+#RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
+#    python3 -m pip install --no-cache-dir -U setuptools && \
+#    python3 -m pip install --no-cache-dir h5py && \
+#    python3 -m pip install --no-cache-dir Cython && \
+#    python3 -m pip install --no-cache-dir matplotlib && \
+#    python3 -m pip install --no-cache-dir versioneer==0.17 && \
+#    python3 -m pip install --no-cache-dir pyproj Cartopy==0.16 && \
+#    python3 -m pip install --no-cache-dir pandas && \
+#    python3 -m pip install --no-cache-dir seaborn && \
+#    python3 -m pip install --no-cache-dir pillow && \
+#    python3 -m pip install --no-cache-dir networkx cvxpy && \
+#    python3 -m pip install --no-cache-dir scikit-learn scikit-image && \
+#    python3 -m pip install --no-cache-dir pygments && \
+#    python3 -m pip install --no-cache-dir tqdm && \
+#    python3 -m pip install --no-cache-dir ipython && \
+#    python3 -m pip install --no-cache-dir jupyter && \
+#    python3 -m pip install --no-cache-dir jupyterlab && \
+#    rm -rf /root/.cache && \
+#    rm -f /tmp/*.whl
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
 
 RUN export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH
@@ -127,16 +169,10 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     chmod g+w /etc/passwd && \
     fix-permissions $HOME
 
-USER $NB_UID
+
 WORKDIR $HOME
+RUN mkdir /home/$NB_USER/work
 
-# Setup work directory for backward-compatibility
-RUN mkdir /home/$NB_USER/work && \
-    fix-permissions /home/$NB_USER
-
-# Fix permissions on /etc/jupyter as root
-USER root
-RUN fix-permissions /usr/local/bin/jupyter
 
 # Install CUDA-10.1 + cuDNN 7.6.0
 RUN ln -s /usr/local/cuda-$CUDA /usr/local/cuda && \

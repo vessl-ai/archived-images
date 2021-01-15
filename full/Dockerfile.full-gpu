@@ -1,4 +1,4 @@
-FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.1
+FROM savvihub/kernels:py36-cuda10.1
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 ENV MXNET_VERSION 1.6.0
