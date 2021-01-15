@@ -56,7 +56,7 @@ RUN pip install --upgrade \
 		sympy \
 		seaborn \
 		nose \
-		jupyterlab-git \
+		jupyterlab-git==0.11.0 \
 		Cartopy==0.16 \
 		cvxpy \
 		h5py \
@@ -71,6 +71,8 @@ RUN pip install --upgrade \
 		jupyterlab_tensorboard \
 	    @mflevine/jupyterlab_html \
 		jupyterlab-spreadsheet
+
+RUN nbdime extensions --disable
 
 RUN npm i @jupyterlab/toc-extension
 
