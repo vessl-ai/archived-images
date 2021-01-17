@@ -65,10 +65,8 @@ RUN pip install --upgrade \
 		jupyterlab_tensorboard \
 	    @mflevine/jupyterlab_html \
 		jupyterlab-spreadsheet
-
 RUN nbdime extensions --disable
-
-RUN npm i @jupyterlab/toc-extension
+RUN npm i @jupyterlab/toc
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
 
