@@ -1,4 +1,4 @@
-FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-ubuntu18.04
+FROM savvihub/kernels:py36-ubuntu18.04
 
 MAINTAINER floyd@savvihub.com
 
@@ -16,10 +16,7 @@ RUN python3 -m pip install --no-cache-dir --use-feature=2020-resolver \
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
 
 # Install ipython kernelspec
-RUN python -m ipykernel install --display-name "Tensorflow 2.2 on Python 3.6 (CPU-only)" && \
+RUN python3 -m ipykernel install --display-name "Tensorflow 2.2 on Python 3.6 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
-
-USER $NB_UID
-WORKDIR $HOME/work
 
 CMD ["start-notebook.sh"]

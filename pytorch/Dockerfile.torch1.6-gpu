@@ -1,4 +1,4 @@
-FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.1
+FROM savvihub/kernels:py36-cuda10.1
 
 ENV TORCH_VERSION=1.6.0
 ENV TORCHVISION_VERSION=0.7.0
@@ -24,10 +24,7 @@ RUN python -m pip install --no-cache-dir --use-feature=2020-resolver \
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
 
 # Install ipython kernelspec
-RUN python -m ipykernel install --display-name "PyTorch 1.5 on Python 3.6 (GPU)" && \
+RUN python3 -m ipykernel install --display-name "PyTorch 1.5 on Python 3.6 (GPU)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
-
-USER $NB_UID
-WORKDIR $HOME/work
 
 CMD ["start-notebook.sh"]

@@ -1,4 +1,4 @@
-FROM gcr.io/savvy-kit-260206/aron-backend-kernel:py36-cuda10.1
+FROM savvihub/kernels:py36-cuda10.1
 
 ENV TF_VERSION 2.2
 
@@ -25,10 +25,7 @@ RUN python3 -m pip install --no-cache-dir wheel && \
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
 
 # Install ipython kernelspec
-RUN python -m ipykernel install --display-name "Tensorflow 2.2 on Python 3.6 (GPU)" && \
+RUN python3 -m ipykernel install --display-name "Tensorflow 2.2 on Python 3.6 (GPU)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
-
-USER $NB_UID
-WORKDIR $HOME/work
 
 CMD ["start-notebook.sh"]
