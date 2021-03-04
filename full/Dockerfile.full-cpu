@@ -12,8 +12,8 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
-RUN python3 -m pip install --no-cache-dir --use-feature=2020-resolver wheel && \
-    python3 -m pip install --no-cache-dir --use-feature=2020-resolver \
+RUN python3 -m pip install --no-cache-dir wheel && \
+    python3 -m pip install --no-cache-dir \
     "typing-extensions>=3.7.4" \
     "typing<=3.6.6" \
     "urllib3<1.25,>=1.21.1" \
@@ -22,12 +22,25 @@ RUN python3 -m pip install --no-cache-dir --use-feature=2020-resolver wheel && \
     https://download.pytorch.org/whl/cpu/torch-${TORCH_VERSION}%2Bcpu-cp36-cp36m-linux_x86_64.whl \
     https://download.pytorch.org/whl/cpu/torchvision-${TORCHVISION_VERSION}%2Bcpu-cp36-cp36m-linux_x86_64.whl \
     keras keras_applications keras_preprocessing \
-    tensorflow-hub==0.5.0 tf2onnx && \
-    rm -rf /root/.cache
+    tensorflow-hub==0.5.0 tf2onnx
 
 # Install more pip dependencies
 COPY requirements.cpu.txt requirements.txt
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+# Install Jupyter Lab extenstion dependencies
+RUN python3 -m pip install --no-cache-dir --upgrade \
+	jupyterlab-git==0.11.0 \
+	jupyter-tensorboard && \
+	jupyter labextension install \
+		jupyterlab_tensorboard \
+		@jupyterlab/git \
+	    @mflevine/jupyterlab_html \
+		jupyterlab-spreadsheet
+
+RUN nbdime extensions --disable
+RUN npm i @jupyterlab/toc
+RUN jupyter lab build --minimize=False
 
 # Reinstall for ipykernel compatibility
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
@@ -35,5 +48,7 @@ RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
 # Install ipython kernelspec
 RUN python3 -m ipykernel install --display-name "Full on Python 3.6 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
+
+RUN rm -rf /root/.cache && rm -f /tmp/*.whl
 
 CMD ["start-notebook.sh"]

@@ -6,11 +6,30 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
-RUN python3 -m pip install --no-cache-dir --upgrade --use-feature=2020-resolver \
+RUN python3 -m pip install --no-cache-dir --upgrade \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     ngraph-tensorflow-bridge \
-    tensorwatch==0.8.10
+    tensorwatch==0.8.10 && \
+    rm -rf /root/.cache && \
+	rm -f /tmp/*.whl
+
+# Install Jupyter Lab extenstion dependencies
+RUN python3 -m pip install --no-cache-dir --upgrade \
+	jupyterlab-git==0.11.0 \
+	jupyter-tensorboard && \
+	jupyter labextension install \
+		jupyterlab_tensorboard \
+		@jupyterlab/git \
+	    @mflevine/jupyterlab_html \
+		jupyterlab-spreadsheet && \
+	rm -rf /root/.cache && \
+	rm -f /tmp/*.whl
+
+RUN nbdime extensions --disable
+RUN npm uninstall popper.js && npm i @popperjs/core
+RUN npm i @jupyterlab/toc
+RUN jupyter lab build --minimize=False
 
 # Reinstall for ipykernel compatibility
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel

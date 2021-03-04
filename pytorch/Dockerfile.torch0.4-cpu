@@ -10,10 +10,26 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install torch and torchvision
-RUN python -m pip install --no-cache-dir --use-feature=2020-resolver \
+RUN python -m pip install --no-cache-dir \
     https://download.pytorch.org/whl/cpu/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl \
     https://download.pytorch.org/whl/torchvision-${TORCHVISION_VERSION}-py2.py3-none-any.whl && \
-    rm -rf /root/.cache
+    rm -rf /root/.cache && \
+	rm -f /tmp/*.whl
+
+# Install Jupyter Lab extenstion dependencies
+RUN python3 -m pip install --no-cache-dir --upgrade \
+	jupyterlab-git==0.11.0 && \
+	jupyter labextension install \
+		@jupyterlab/git \
+	    @mflevine/jupyterlab_html \
+		jupyterlab-spreadsheet && \
+	rm -rf /root/.cache && \
+	rm -f /tmp/*.whl
+
+RUN nbdime extensions --disable
+RUN npm uninstall popper.js && npm i @popperjs/core
+RUN npm i @jupyterlab/toc
+RUN jupyter lab build --minimize=False
 
 # Reinstall for ipykernel compatibility
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel

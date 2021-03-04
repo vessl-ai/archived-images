@@ -15,8 +15,8 @@ USER root
 RUN python3 -m pip install --upgrade pip
 
 # Install pip package dependencies
-RUN python3 -m pip install --no-cache-dir --use-feature=2020-resolver wheel && \
-    python3 -m pip install --no-cache-dir --use-feature=2020-resolver \
+RUN python3 -m pip install --no-cache-dir wheel && \
+    python3 -m pip install --no-cache-dir \
     "typing-extensions>=3.7.4" \
     "typing<=3.6.6" \
     "urllib3<1.25,>=1.21.1"
@@ -35,12 +35,27 @@ RUN python3 -m pip install --no-cache-dir \
     https://download.pytorch.org/whl/torchtext-${TORCHTEXT_VERSION}-py3-none-any.whl \
     tensorboardX==${TENSORBOARDX_VERSION} \
     keras keras_applications keras_preprocessing \
-    tensorflow-hub==0.5.0 tf2onnx && \
-    rm -rf /root/.cache
+    tensorflow-hub==0.5.0 tf2onnx
 
 # Install more pip dependencies
 COPY requirements.gpu.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
+RUN python3 -m pip install --no-cache-dir -r requirements.txt 
+
+# Install Jupyter Lab extenstion dependencies
+RUN python3 -m pip install --no-cache-dir --upgrade \
+	jupyterlab-git==0.11.0 \
+	jupyter-tensorboard && \
+	jupyter labextension install \
+		jupyterlab_tensorboard \
+		@jupyterlab/git \
+	    @mflevine/jupyterlab_html \
+		jupyterlab-spreadsheet && \
+	rm -rf /root/.cache && \
+	rm -f /tmp/*.whl
+
+RUN nbdime extensions --disable
+RUN npm i @jupyterlab/toc
+RUN jupyter lab build --minimize=False
 
 # Reinstall for ipykernel compatibility
 RUN python3 -m pip uninstall -y ipykernel && python3 -m pip install ipykernel
