@@ -26,16 +26,11 @@ RUN apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
-  	apt-get install -y nodejs  && \
-  	rm -rf /var/lib/apt/lists/*
-
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
   	pip install --upgrade pip && \
   	pip install --upgrade Cython "numpy<1.17"
 
 RUN pip install --upgrade \
-		jupyterlab==1.2.6 \
 		ipywidgets \
 		plotly \
 		bokeh \
@@ -63,6 +58,3 @@ RUN pip install --upgrade \
 	rm -f /tmp/*.whl
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
-
-COPY start-notebook.sh /usr/local/bin/
-COPY config/ /root/.jupyter/
