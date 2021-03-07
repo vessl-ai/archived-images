@@ -4,7 +4,7 @@ MAINTAINER floyd@savvihub.com
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 ENV MXNET_VERSION 1.6.0
-ENV TF_VERSION 2.2.0
+ENV TF_VERSION 2.1.0
 ENV TORCH_VERSION=1.6.0
 ENV TORCHVISION_VERSION=0.7.0
 
@@ -30,7 +30,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Install Jupyter Lab extenstion dependencies
 COPY requirements.jupyter.txt requirements.jupyter.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
+RUN python3 -m pip install --no-cache-dir -r requirements.jupyter.txt
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
@@ -40,9 +40,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
 # Jupyterlab extension install
 RUN jupyter labextension install \
 		jupyterlab_tensorboard \
-		@jupyterlab/git \
-	    @mflevine/jupyterlab_html \
-		jupyterlab-spreadsheet
+		@jupyterlab/git
 RUN nbdime extensions --disable
 RUN npm uninstall popper.js && npm i @popperjs/core
 RUN npm i @jupyterlab/toc

@@ -1,0 +1,22 @@
+FROM savvihub/kernels:py37
+
+MAINTAINER floyd@savvihub.com
+
+ENV MXNET_VERSION 1.6.0
+ENV TF_VERSION 2.2.0
+ENV TORCH_VERSION 1.6.0
+ENV TORCHVISION_VERSION 0.7.0
+
+USER root
+RUN python3 -m pip install --upgrade pip
+
+# Install ML frameworks
+RUN python3 -m pip install --no-cache-dir \
+	mxnet==$MXNET_VERSION \
+	tensorflow==$TF_VERSION \
+	https://download.pytorch.org/whl/cpu/torch-${TORCH_VERSION}%2Bcpu-cp37-cp37m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/cpu/torchvision-${TORCHVISION_VERSION}%2Bcpu-cp37-cp37m-linux_x86_64.whl \
+    keras keras_applications keras_preprocessing \
+    tensorflow-hub==0.5.0 tf2onnx && \
+    rm -rf /root/.cache && \
+	rm -f /tmp/*.whl

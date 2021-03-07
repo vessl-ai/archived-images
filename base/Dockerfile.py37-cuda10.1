@@ -11,7 +11,7 @@ ENV CUBLAS_VERSION=10.2.1.243-1
 ENV CUDNN_VERSION=$CUDNN+cuda$CUDA
 ENV NCCL_VERSION=2.6.4-1+cuda$CUDA
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHON_VERSION=3.6
+ENV PYTHON_VERSION=3.7
 ENV PYTHONUNBUFFERED=1 \
     LD_LIBRARY_PATH="/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
     PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/mecab"
@@ -93,7 +93,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt && \
 	rm -f /tmp/*.whl && \
 	rm -f requirements.txt
 
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 2
 
 RUN export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH
 RUN ln -s /usr/local/cuda-$CUDA /usr/local/cuda && \

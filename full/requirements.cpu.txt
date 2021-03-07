@@ -216,7 +216,7 @@ tables==3.4.4
 tabulate==0.8.7
 tbb==2020.0.133
 tblib==1.6.0
-tensorflow==2.2.0
+tensorflow==2.1.0
 tensorflow-addons==0.8.3
 tensorflow-datasets==2.1.0
 tensorflow-gcs-config==2.2.0
