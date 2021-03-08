@@ -6,7 +6,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1 \
     PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANG=C.UTF-8 \
-    SHELL=/bin/bash
+    SHELL=/bin/bash \
+    PYTHONPATH="/usr/local/lib/python3.6/dist-packages:${PYTHONPATH}"
 
 USER root
 
