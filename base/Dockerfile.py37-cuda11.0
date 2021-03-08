@@ -77,14 +77,14 @@ RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
   	pip install --upgrade pip && \
   	pip install -U setuptools
 
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 2
+
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
 	rm -rf /root/.cache && \
 	rm -f /tmp/*.whl && \
 	rm -f requirements.txt
-
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 2
 
 RUN export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH
 RUN ln -s /usr/local/cuda-$CUDA /usr/local/cuda && \
