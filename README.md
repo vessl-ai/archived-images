@@ -9,10 +9,6 @@ python deploy.py --dir {DIRECTORY} --tag {TAG} --push
 ```
 
 ### Base
-#### Data science packages (DS)
-```bash
-numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, tqdm
-```
 | Python | CUDA | DS | Image Tag                        |
 |--------|------|----|----------------------------------|
 | 3.6    | x    | ✅ | `savvihub/kernels:py36`          |
@@ -21,6 +17,10 @@ numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, 
 | 3.7    | x    | ✅ | `savvihub/kernels:py37`          |
 | 3.7    | 10.1 | ✅ | `savvihub/kernels:py37-cuda10.1` |
 | 3.7    | 11.0 | ✅ | `savvihub/kernels:py37-cuda11.0` |
+#### Data science packages (DS)
+```bash
+numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, tqdm
+```
 
 ### Experiment
 | Python | CUDA | PyTorch | TensorFlow | MXNet | DS | Image Tag                                 |
@@ -35,12 +35,20 @@ numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, 
 ### Service (Jupyter)
 | Python | CUDA | PyTorch | TensorFlow | MXNet | Jupyter | DS | Image Tag                                        |
 |--------|------|---------|------------|-------|---------|----|--------------------------------------------------|
-| 3.6    | x    | 1.6.0   | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36.full-cpu.jupyter`          |
-| 3.6    | 10.1 | 1.6.0   | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda10.1.full-cpu.jupyter` | 
-| 3.6    | 11.0 | 1.7.0   | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda11.0.full-cpu.jupyter` |
+| 3.6    | x    | 1.6.0   | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36.full-cpu.jupyter`          |
+| 3.6    | 10.1 | 1.6.0   | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda10.1.full-cpu.jupyter` |
 | 3.7    | x    | 1.6.0   | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37.full-gpu.jupyter`          |
 | 3.7    | 10.1 | 1.6.0   | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu.jupyter` |
-| 3.7    | 11.0 | 1.7.0   | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda11.0.full-gpu.jupyter` |
+
+#### Disclaimer
+`jupyter_tensorboard` , jupyterlab extension, is not installed in CUDA 11.0 related images because `tensorflow` conflict error occurs due to [this issue](https://github.com/chaoleili/jupyterlab_tensorboard/issues/25).  
+```bash
+Dependency conflict:
+jupyter_tensorboard requires tensorflow<2.2.0
+CUDA 11.0           requires tensorflow>=2.4.0
+```
+ 
+ 
 
 ## Public Image 
 ### PyTorch
