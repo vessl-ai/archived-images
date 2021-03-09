@@ -1,6 +1,6 @@
-# aron-backend-kernels
+# images
 
-SavviHub kernel images for experiment and service
+SavviHub images for experiment and service
 
 ## Image Description
 ### Data science packages (DS)
@@ -27,9 +27,15 @@ CUDA 11.0           requires tensorflow>=2.4.0
 
 
 ## SavviHub Image
-### Command
+### Commands
 ```bash
-python deploy.py --dir {DIRECTORY} --tag {TAG} --push
+# Use deploy script
+python deploy.py --dockerhub {DOCKERHUB_REPO} -t {TAG} {DIR} --push
+
+make push-base       # Build base images and push them to savvihub/kernels 
+make push-experiment # Build experiment images and push them to savvihub/kernels
+make push-service    # Build service images and push them to savvihub/kernels
+make push-all        # Build all images and push them to savvihub/kernels
 ```
 
 ### Base

@@ -1,55 +1,43 @@
-run:
-	docker run -td -p 8888:8888 gcr.io/savvy-kit-260206/aron-backend-kernel:$(tag)
+run_image:
+	docker run -td savvihub/kernels:$(tag)
 
-push-cpu:
-	python deploy.py --dir base --tag py36-ubuntu18.04 --push
-	python deploy.py --dir pytorch --tag torch0.4-cpu --push
-	python deploy.py --dir pytorch --tag torch1.5-cpu --push
-	python deploy.py --dir tensorflow --tag tf1.14-cpu --push
-	python deploy.py --dir mxnet --tag 1.6.0-cpu --push
-	python deploy.py --dir full --tag full-cpu --push
+run_jupyter:
+	docker run -td -p 8888:8888 savvihub/kernels:$(tag)
 
-push-cuda9.2:
-	python deploy.py --dir base --tag py36-cuda9.2 --push
-	python deploy.py --dir pytorch --tag torch0.4-gpu --push
+push-base: push-base-py36 push-base-py37
 
-push-cuda10.0:
-	python deploy.py --dir base --tag py36-cuda10.0--push
-	python deploy.py --dir tensorflow --tag tf1.14-gpu --push
+push-base-py36:
+	python deploy.py --dockerhub savvihub/kerenels -t py36 base --push
+	python deploy.py --dockerhub savvihub/kerenels -t py36-cuda10.1 base --push
+	python deploy.py --dockerhub savvihub/kerenels -t py36-cuda11.0 base --push
 
-push-cuda10.1:
-	python deploy.py --dir base --tag py36-cuda10.1 --push
-	python deploy.py --dir pytorch --tag torch1.5-gpu --push
-	python deploy.py --dir tensorflow --tag tf2.2-gpu --push
-	python deploy.py --dir mxnet --tag 1.6.0-gpu --push
-	python deploy.py --dir full --tag full-gpu --push
+push-base-py37:
+	python deploy.py --dockerhub savvihub/kerenels -t py37 base --push
+	python deploy.py --dockerhub savvihub/kerenels -t py37-cuda10.1 base --push
+	python deploy.py --dockerhub savvihub/kerenels -t py37-cuda11.0 base --push
 
-push-base:
-	python deploy.py --dir base --tag py36-ubuntu18.04 --push
-	python deploy.py --dir base --tag py36-cuda9.2 --push
-	python deploy.py --dir base --tag py36-cuda10.0 --push
-	python deploy.py --dir base --tag py36-cuda10.1 --push
+push-experiment: push-experiment-py36 push-experiment-py37
 
-push-torch:
-	python deploy.py --dir pytorch --tag torch0.4-cpu --push
-	python deploy.py --dir pytorch --tag torch0.4-gpu --push
-	python deploy.py --dir pytorch --tag torch1.5-cpu --push
-	python deploy.py --dir pytorch --tag torch1.5-gpu --push
-	python deploy.py --dir pytorch --tag torch1.6-cpu --push
-	python deploy.py --dir pytorch --tag torch1.6-gpu --push
+push-experiment-py36:
+	python deploy.py --dockerhub savvihub/kerenels -t py36.full-cpu experiment --push
+	python deploy.py --dockerhub savvihub/kerenels -t py36-cuda10.1.full-gpu experiment --push
+	python deploy.py --dockerhub savvihub/kerenels -t py36-cuda11.0.full-gpu experiment --push
 
-push-tf:
-	python deploy.py --dir tensorflow --tag tf1.14-cpu --push
-	python deploy.py --dir tensorflow --tag tf1.15-gpu --push
-	python deploy.py --dir tensorflow --tag tf2.2-cpu --push
-	python deploy.py --dir tensorflow --tag tf2.2-gpu --push
+push-experiment-py37:
+	python deploy.py --dockerhub savvihub/kerenels -t py37.full-cpu experiment --push
+	python deploy.py --dockerhub savvihub/kerenels -t py37-cuda10.1.full-gpu experiment --push
+	python deploy.py --dockerhub savvihub/kerenels -t py37-cuda11.0.full-gpu experiment --push
 
-push-mxnet:
-	python deploy.py --dir mxnet --tag mxnet1.6.0-cpu --push
-	python deploy.py --dir mxnet --tag mxnet1.6.0-gpu --push
+push-service: push-service-py36 push-service-py37
 
-push-full:
-	python deploy.py --dir full --tag full-cpu --push
-	python deploy.py --dir full --tag full-gpu --push
+push-service-py36:
+	python deploy.py --dockerhub savvihub/kerenels -t py36.full-cpu.jupyter service --push
+	python deploy.py --dockerhub savvihub/kerenels -t py36-cuda10.1.full-gpu.jupyter service --push
+	python deploy.py --dockerhub savvihub/kerenels -t py36-cuda11.0.full-gpu.jupyter service --push
 
-push-all: push-base push-torch push-tf push-mxnet push-full
+push-service-py37:
+	python deploy.py --dockerhub savvihub/kerenels -t py37.full-cpu.jupyter service --push
+	python deploy.py --dockerhub savvihub/kerenels -t py37-cuda10.1.full-gpu.jupyter service --push
+	python deploy.py --dockerhub savvihub/kerenels -t py37-cuda11.0.full-gpu.jupyter service --push
+
+push-all: push-base push-experiment push-service
