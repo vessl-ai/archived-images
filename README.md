@@ -53,8 +53,8 @@ make push-all        # Build all images and push them to savvihub/kernels
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | DS | Image Tag                                 |
 |--------|------|-------------|------------|-------|----|-------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36.full-cpu`          |
-| 3.6    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda10.1.full-cpu` | 
-| 3.6    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda11.0.full-cpu` |
+| 3.6    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda10.1.full-gpu` | 
+| 3.6    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda11.0.full-gpu` |
 | 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37.full-gpu`          |
 | 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu` |
 | 3.7    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda11.0.full-gpu` |
@@ -63,8 +63,8 @@ make push-all        # Build all images and push them to savvihub/kernels
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                        |
 |--------|------|-------------|------------|-------|---------|----|--------------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36.full-cpu.jupyter`          |
-| 3.6    | 10.1 | 1.6.0+cu101 | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda10.1.full-cpu.jupyter` |
-| 3.6    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda11.0.full-cpu.jupyter` |
+| 3.6    | 10.1 | 1.6.0+cu101 | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda10.1.full-gpu.jupyter` |
+| 3.6    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda11.0.full-gpu.jupyter` |
 | 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37.full-gpu.jupyter`          |
 | 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu.jupyter` |
 | 3.7    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda11.0.full-gpu.jupyter` |
