@@ -15,7 +15,7 @@ ENV PYTHON_VERSION=3.7
 ENV PYTHONUNBUFFERED=1 \
     LD_LIBRARY_PATH="/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
     PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/mecab" \
-    PYTHONPATH="/usr/local/lib/python3.6/dist-packages:${PYTHONPATH}"
+    PYTHONPATH="/usr/local/lib/python3.7/dist-packages:/usr/local/lib/python3.6/dist-packages:${PYTHONPATH}"
 
 SHELL ["/bin/bash", "-cu"]
 
