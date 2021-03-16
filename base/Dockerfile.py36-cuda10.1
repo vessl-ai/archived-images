@@ -23,6 +23,7 @@ USER root
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends software-properties-common && \
     apt-get install -y --no-install-recommends apt-utils && \
+    apt-get install -y --no-install-recommends libgl1-mesa-glx && \
     add-apt-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" && \
     apt-get update -y && \
     apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
