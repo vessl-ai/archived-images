@@ -29,6 +29,7 @@ RUN apt-get update -y && \
     apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
         build-essential \
         ca-certificates \
+        openssh-server \
         wget curl git git-core\
         vim-tiny zip unzip \
         python$PYTHON_VERSION python$PYTHON_VERSION-dev python3-pip \
