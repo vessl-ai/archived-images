@@ -1,7 +1,7 @@
 FROM python:3.8.3-slim
 
 # install basics
-RUN apt-get update && apt-get install curl gcc git -y
+RUN apt-get update && apt-get install curl gcc git zip unzip -y
 
 # install ttyd
 RUN curl -LO https://github.com/tsl0922/ttyd/releases/download/1.6.3/ttyd.x86_64
