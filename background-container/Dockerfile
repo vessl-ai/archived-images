@@ -15,5 +15,6 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 
 # install savvihub cli
 RUN pip install savvihub==0.0.97
+RUN pip install dvc[s3]
 
 ENTRYPOINT ["/bin/sh"]
