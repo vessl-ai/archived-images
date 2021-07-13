@@ -15,7 +15,7 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 
 # install external libraries
 RUN pip install awscli==1.19.110
-RUN pip install dvc==2.5.4
+RUN pip install 'dvc[gs,s3]'==2.5.4
 
 # install savvihub cli
 RUN pip install savvihub==0.0.97
