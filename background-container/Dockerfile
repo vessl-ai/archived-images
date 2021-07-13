@@ -13,8 +13,11 @@ RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
+# install external libraries
+RUN pip install awscli==1.19.110
+RUN pip install dvc==2.5.4
+
 # install savvihub cli
 RUN pip install savvihub==0.0.97
-RUN pip install dvc[s3]
 
 ENTRYPOINT ["/bin/sh"]
