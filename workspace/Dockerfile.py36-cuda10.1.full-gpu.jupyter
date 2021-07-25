@@ -1,11 +1,12 @@
 FROM savvihub/kernels:py36-cuda10.1.full-gpu
 
-MAINTAINER floyd@savvihub.com
-
 ENV JUPYTER_ENABLE_LAB=TRUE
 
 USER root
 RUN python -m pip install --upgrade pip
+
+# Install packages
+RUN apt-get update && apt-get install -y systemd vim jq htop tmux
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \

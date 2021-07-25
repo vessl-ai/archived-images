@@ -1,26 +1,20 @@
-FROM savvihub/kernels:py36.full-cpu
-
-MAINTAINER floyd@savvihub.com
+FROM savvihub/kernels:py37-cuda11.0.full-gpu
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 
 USER root
 RUN python -m pip install --upgrade pip
 
+# Install packages
+RUN apt-get update && apt-get install -y systemd vim jq htop tmux
+
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
   	apt-get install -y nodejs  && \
   	rm -rf /var/lib/apt/lists/*
 
-# Install Jupyter prerequisite packages
-COPY requirements.prereq.jupyter.txt requirements.txt
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-	rm -rf /root/.cache && \
-	rm -f /tmp/*.whl && \
-	rm -f requirements.txt
-
 # Install Jupyter requirements
-COPY requirements.jupyter.txt requirements.txt
+COPY requirements.cuda11.0.jupyter.txt requirements.txt
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
 	rm -rf /root/.cache && \
 	rm -f /tmp/*.whl && \
@@ -31,11 +25,10 @@ RUN jupyter serverextension enable --py jupyterlab --sys-prefix
 
 RUN jupyter labextension install --no-build @jupyterlab/git@0.23.3 && \
     jupyter labextension install --no-build @jupyterlab/toc && \
-    jupyter labextension install --no-build jupyterlab_tensorboard && \
 	jupyter lab build --dev-build=False --minimize=False
 
 # Install ipython kernelspec
-RUN python -m ipykernel install --display-name "Full on Python 3.6 (CPU-only)" && \
+RUN python -m ipykernel install --display-name "Full on Python 3.7 (GPU)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
 COPY start-notebook.sh /usr/local/bin/

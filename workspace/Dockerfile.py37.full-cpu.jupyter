@@ -1,11 +1,12 @@
-FROM savvihub/kernels:py37-cuda10.1.full-gpu
-
-MAINTAINER floyd@savvihub.com
+FROM savvihub/kernels:py37.full-cpu
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 
 USER root
 RUN python -m pip install --upgrade pip
+
+# Install packages
+RUN apt-get update && apt-get install -y systemd vim jq htop tmux
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
@@ -35,7 +36,7 @@ RUN jupyter labextension install --no-build @jupyterlab/git@0.23.3 && \
 	jupyter lab build --dev-build=False --minimize=False
 
 # Install ipython kernelspec
-RUN python -m ipykernel install --display-name "Full on Python 3.7 (GPU)" && \
+RUN python -m ipykernel install --display-name "Full on Python 3.7 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
 COPY start-notebook.sh /usr/local/bin/
