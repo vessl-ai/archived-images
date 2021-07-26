@@ -1,7 +1,5 @@
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
-MAINTAINER floyd@savvihub.com
-
 ENV LANG=C.UTF-8
 ARG CUDA=10.1
 ARG LIBNVINFER=6.0.1-1
@@ -30,8 +28,8 @@ RUN apt-get update -y && \
         build-essential \
         ca-certificates \
         openssh-server \
-        wget curl git git-core\
-        vim-tiny zip unzip \
+        wget curl git git-core \
+        vim zip unzip \
         python$PYTHON_VERSION python$PYTHON_VERSION-dev python3-pip \
         libexpat1 libbz2-dev libffi6 libsqlite3-0 liblzma5 zlib1g \
     iputils-ping \
@@ -58,21 +56,21 @@ RUN apt-get update -y && \
         libjpeg-dev \
         libpng-dev \
     libsm6 \
-	libxext6 \
-	libxrender-dev \
-	libcairo2-dev libgirepository1.0-dev pkg-config gir1.2-gtk-3.0 \
+    libxext6 \
+    libxrender-dev \
+    libcairo2-dev libgirepository1.0-dev pkg-config gir1.2-gtk-3.0 \
         libgeos-dev libgeos++-dev \
         pkg-config \
         zlib1g-dev \
-	libmpdec2 \
+    libmpdec2 \
         libssl1.0.0 \
-	libssl-dev \
+    libssl-dev \
         libncursesw5 libtinfo5 \
-	proj-bin \
+    proj-bin \
         libgeos-dev \
         mime-support \
         sudo \
-	gcc g++ \
+    gcc g++ \
         libproj-dev libgeos-dev \
         libzmq3-dev libuv1 && \
     apt-get clean && \
@@ -85,15 +83,15 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
     && ldconfig
 
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
-  	pip install --upgrade pip && \
-  	pip install -U setuptools
+    pip install --upgrade pip && \
+    pip install -U setuptools
 
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
 RUN python3 -m pip install --no-cache-dir -r requirements.txt && \
-	rm -rf /root/.cache && \
-	rm -f /tmp/*.whl && \
-	rm -f requirements.txt
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl && \
+    rm -f requirements.txt
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
 

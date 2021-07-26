@@ -1,6 +1,6 @@
 # images
 
-SavviHub images for experiment and service
+SavviHub images for experiment and workspace
 
 ## Image Description
 ### Data science packages (DS)
@@ -34,7 +34,7 @@ python deploy.py --dockerhub {DOCKERHUB_REPO} -t {TAG} {DIR} --push
 
 make push-base       # Build base images and push them to savvihub/kernels 
 make push-experiment # Build experiment images and push them to savvihub/kernels
-make push-service    # Build service images and push them to savvihub/kernels
+make push-workspace  # Build workspace images and push them to savvihub/kernels
 make push-all        # Build all images and push them to savvihub/kernels
 ```
 
@@ -59,7 +59,7 @@ make push-all        # Build all images and push them to savvihub/kernels
 | 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu` |
 | 3.7    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda11.0.full-gpu` |
 
-### Service (Jupyter)
+### Workspace (Jupyter)
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                        |
 |--------|------|-------------|------------|-------|---------|----|--------------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36.full-cpu.jupyter`          |

@@ -1,6 +1,4 @@
-FROM python:3.7.10-slim-buster
-
-MAINTAINER floyd@savvihub.com
+FROM python:3.7.11-slim-buster
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1 \
@@ -12,15 +10,15 @@ ENV PYTHONUNBUFFERED=1 \
 USER root
 
 RUN apt-get update && \
-	apt-get install -yq --no-install-recommends \
-		ca-certificates curl \
-		gcc g++ git git-core \
-		libgeos-dev libgeos++-dev libglib2.0-0 libgl1-mesa-glx libmpdec2 libproj-dev libssl-dev \
+    apt-get install -yq --no-install-recommends \
+        ca-certificates curl \
+        gcc g++ git git-core \
+        libgeos-dev libgeos++-dev libglib2.0-0 libgl1-mesa-glx libmpdec2 libproj-dev libssl-dev \
         mime-support \
         openssh-server \
         proj-bin \
         sudo \
-        vim-tiny \
+        vim \
         unzip \
         zip \
         wget && \
@@ -30,6 +28,6 @@ RUN apt-get update && \
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
 RUN python3 -m pip install --no-cache-dir -r requirements.txt && \
-	rm -rf /root/.cache && \
-	rm -f /tmp/*.whl && \
-	rm -f requirements.txt
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl && \
+    rm -f requirements.txt

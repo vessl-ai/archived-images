@@ -13,9 +13,12 @@ ENV mecab_dicdir /usr/local/lib/mecab/dic/mecab-ko-dic
 USER root
 RUN python -m pip install --upgrade pip
 
+# Install CLI
+RUN python -m pip install savvihub
+
 # Install ML frameworks
 RUN python -m pip install --no-cache-dir \
-	mxnet-cu101mkl==${MXNET_VERSION}.post0 \
+    mxnet-cu101mkl==${MXNET_VERSION}.post0 \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     tensorwatch==0.9.1 \
@@ -27,4 +30,4 @@ RUN python -m pip install --no-cache-dir \
     keras keras_applications keras_preprocessing \
     tensorflow-hub==0.5.0 tf2onnx && \
     rm -rf /root/.cache && \
-	rm -f /tmp/*.whl
+    rm -f /tmp/*.whl
