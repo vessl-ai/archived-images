@@ -11,13 +11,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV mecab_dicdir /usr/local/lib/mecab/dic/mecab-ko-dic
 
 USER root
-RUN python3 -m pip install --upgrade pip
+RUN pip install --upgrade pip
 
 # Install CLI
-RUN python -m pip install savvihub
+RUN pip install savvihub
 
 # Install ML frameworks
-RUN python3 -m pip install --no-cache-dir \
+RUN pip install --no-cache-dir \
     mxnet-cu101mkl==${MXNET_VERSION}.post0 \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \

@@ -4,8 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1 \
     PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANG=C.UTF-8 \
-    SHELL=/bin/bash \
-    PYTHONPATH="/usr/local/lib/python3.6/dist-packages:${PYTHONPATH}"
+    SHELL=/bin/bash
 
 USER root
 
@@ -18,16 +17,15 @@ RUN apt-get update && \
         openssh-server \
         proj-bin \
         sudo \
-        vim \
-        unzip \
-        zip \
+        vim jq tmux \
+        unzip zip \
         wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt && \
+RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
     rm -f requirements.txt

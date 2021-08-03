@@ -1,112 +1,71 @@
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
 ENV LANG=C.UTF-8
-ARG CUDA=10.1
-ARG LIBNVINFER=6.0.1-1
-ARG LIBNVINFER_MAJOR_VERSION=6
-ARG CUDNN=7.6.5.32-1
-ENV CUBLAS_VERSION=10.2.1.243-1
-ENV CUDNN_VERSION=$CUDNN+cuda$CUDA
-ENV NCCL_VERSION=2.6.4-1+cuda$CUDA
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHON_VERSION=3.6
+ENV PYTHON_VERSION=3.6.14
 ENV PYTHONUNBUFFERED=1 \
-    LD_LIBRARY_PATH="/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
+    LD_LIBRARY_PATH="/usr/local/ssl/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
     PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/mecab"
 
 SHELL ["/bin/bash", "-cu"]
 
 USER root
 
-RUN apt-get update -y && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends software-properties-common && \
     apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y --no-install-recommends libgl1-mesa-glx && \
-    add-apt-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" && \
-    apt-get update -y && \
+    add-apt-repository -y "deb http://security.ubuntu.com/ubuntu bionic-security main" && \
+    apt-get update && \
     apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
         build-essential \
         ca-certificates \
-        openssh-server \
         wget curl git git-core \
-        vim zip unzip \
-        python$PYTHON_VERSION python$PYTHON_VERSION-dev python3-pip \
-        libexpat1 libbz2-dev libffi6 libsqlite3-0 liblzma5 zlib1g \
-    iputils-ping \
-        cuda-command-line-tools-${CUDA/./-} \
-        libcublas10=$CUBLAS_VERSION\
-        libcublas-dev=$CUBLAS_VERSION \
-        cuda-nvrtc-${CUDA/./-} \
-        cuda-nvrtc-dev-${CUDA/./-} \
-        cuda-cudart-dev-${CUDA/./-} \
-        cuda-cufft-dev-${CUDA/./-} \
-        cuda-curand-dev-${CUDA/./-} \
-        cuda-cusolver-dev-${CUDA/./-} \
-        cuda-cusparse-dev-${CUDA/./-} \
-        libcudnn7=${CUDNN}+cuda${CUDA} \
-    libcudnn7=$CUDNN_VERSION \
-        libcudnn7-dev=$CUDNN_VERSION \
-        libnccl2=$NCCL_VERSION \
-        libnccl-dev=$NCCL_VERSION \
-        libcurl3-dev \
+        vim zip unzip jq tmux \
+        openssh-server \
+        libexpat1 libbz2-dev libffi6 libsqlite3-dev liblzma5 liblzma-dev zlib1g zlib1g-dev \
+        iputils-ping \
         libcurl3-dev \
         libfreetype6-dev \
         libhdf5-serial-dev \
-        libzmq3-dev \
         libjpeg-dev \
         libpng-dev \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    libcairo2-dev libgirepository1.0-dev pkg-config gir1.2-gtk-3.0 \
-        libgeos-dev libgeos++-dev \
+        libsm6 \
+        libxext6 \
+        libxrender-dev \
+        libcairo2-dev libgirepository1.0-dev pkg-config gir1.2-gtk-3.0 \
         pkg-config \
-        zlib1g-dev \
-    libmpdec2 \
+        libmpdec2 \
         libssl1.0.0 \
-    libssl-dev \
-        libncursesw5 libtinfo5 \
-    proj-bin \
-        libgeos-dev \
+        libssl-dev \
+        libncurses5-dev libncursesw5-dev libtinfo5 \
+        libreadline-dev \
+        proj-bin \
         mime-support \
         sudo \
-    gcc g++ \
-        libproj-dev libgeos-dev \
+        gcc g++ \
+        libproj-dev libgeos-dev libgeos++-dev \
         libzmq3-dev libuv1 && \
     apt-get clean && \
-    find /usr/local/cuda-${CUDA}/lib64/ -type f -name 'lib*_static.a' -not -name 'libcudart_static.a' -delete && \
-    rm /usr/lib/x86_64-linux-gnu/libcudnn_static_v7.a && \
-    rm -rf /var/lib/apt/lists/
+    rm -rf /var/lib/apt/lists/*
 
-RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
-    && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
-    && ldconfig
+RUN wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
+RUN tar -xvf Python-$PYTHON_VERSION.tgz
+RUN /bin/bash -c "cd Python-$PYTHON_VERSION/; ./configure; make install"
+RUN rm -rf Python-$PYTHON_VERSION*
 
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3 && \
-    pip install --upgrade pip && \
+RUN update-alternatives --install /usr/bin/python python $(which python3) 2
+
+RUN curl https://bootstrap.pypa.io/get-pip.py | python && \
+    pip install -U pip && \
     pip install -U setuptools
 
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt && \
+RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
     rm -f requirements.txt
-
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
-
-RUN export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH
-RUN ln -s /usr/local/cuda-$CUDA /usr/local/cuda && \
-    ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.7.6.0 /usr/local/cuda/lib64/libcudnn.so && \
-    ldconfig
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    libnvinfer${LIBNVINFER_MAJOR_VERSION}=$LIBNVINFER+cuda$CUDA \
-    libnvinfer-dev=${LIBNVINFER}+cuda${CUDA}  \
-    libnvinfer-plugin6=${LIBNVINFER}+cuda${CUDA} && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 LABEL com.nvidia.cuda.version="10.1" \
       com.nvidia.volumes.needed="nvidia_driver"
