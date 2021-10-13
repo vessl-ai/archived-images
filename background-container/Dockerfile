@@ -18,6 +18,6 @@ RUN pip install awscli==1.20.39
 RUN pip install 'dvc[gs,s3]'==2.7.2
 
 # install savvihub cli
-RUN pip install savvihub==0.1.8
+RUN pip install vessl
 
 ENTRYPOINT ["/bin/sh"]
