@@ -20,4 +20,8 @@ RUN pip install 'dvc[gs,s3]'==2.7.2
 # install savvihub cli
 RUN pip install vessl
 
+# install rsync
+RUN apt-get install rsync -y
+ADD krsync /usr/local/bin/
+
 ENTRYPOINT ["/bin/sh"]
