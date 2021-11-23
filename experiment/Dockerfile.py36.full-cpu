@@ -1,7 +1,7 @@
 FROM public.ecr.aws/vessl/kernels:py36
 
 ENV MXNET_VERSION 1.6.0
-ENV TF_VERSION 2.2.0
+ENV TF_VERSION 2.5.2
 ENV TORCH_VERSION 1.6.0
 ENV TORCHVISION_VERSION 0.7.0
 
@@ -15,6 +15,7 @@ RUN pip install vessl
 RUN pip install --no-cache-dir \
     mxnet==$MXNET_VERSION \
     tensorflow==$TF_VERSION \
+    tensorboard \
     https://download.pytorch.org/whl/cpu/torch-${TORCH_VERSION}%2Bcpu-cp36-cp36m-linux_x86_64.whl \
     https://download.pytorch.org/whl/cpu/torchvision-${TORCHVISION_VERSION}%2Bcpu-cp36-cp36m-linux_x86_64.whl \
     keras keras_applications keras_preprocessing \
