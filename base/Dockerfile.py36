@@ -10,9 +10,10 @@ USER root
 
 RUN apt-get update && \
     apt-get install -yq --no-install-recommends \
+    	build-essential \
         ca-certificates curl \
         gcc g++ git git-core \
-        libgeos-dev libgeos++-dev libglib2.0-0 libgl1-mesa-glx libmpdec2 libproj-dev libssl-dev \
+        libgeos-dev libgeos++-dev libglib2.0-0 libgl1-mesa-glx libmpdec2 libproj-dev libsndfile1 libssl-dev \
         mime-support \
         openssh-server \
         proj-bin \

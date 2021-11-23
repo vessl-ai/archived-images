@@ -1,4 +1,4 @@
-FROM savvihub/kernels:py36
+FROM public.ecr.aws/vessl/kernels:py36
 
 MAINTAINER floyd@savvihub.com
 

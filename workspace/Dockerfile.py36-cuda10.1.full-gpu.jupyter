@@ -1,4 +1,4 @@
-FROM savvihub/kernels:py36-cuda10.1.full-gpu
+FROM public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 

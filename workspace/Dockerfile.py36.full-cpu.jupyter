@@ -1,4 +1,4 @@
-FROM savvihub/kernels:py36.full-cpu
+FROM public.ecr.aws/vessl/kernels:py36.full-cpu
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 

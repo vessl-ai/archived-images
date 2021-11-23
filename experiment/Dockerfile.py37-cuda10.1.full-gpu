@@ -1,4 +1,4 @@
-FROM savvihub/kernels:py37-cuda10.1
+FROM public.ecr.aws/vessl/kernels:py37-cuda10.1
 
 ENV MXNET_VERSION 1.6.0
 ENV TF_VERSION 2.2.0

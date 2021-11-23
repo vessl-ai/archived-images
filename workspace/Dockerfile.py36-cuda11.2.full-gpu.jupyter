@@ -1,4 +1,4 @@
-FROM savvihub/kernels:py36-cuda11.0.full-gpu
+FROM public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu
 
 ENV JUPYTER_ENABLE_LAB=TRUE
 
@@ -10,7 +10,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Jupyter requirements
-COPY requirements.cuda11.0.jupyter.txt requirements.txt
+COPY requirements.cuda11.2.jupyter.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
