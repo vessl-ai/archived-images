@@ -26,7 +26,8 @@ RUN apt-get update && \
 
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt && \
+RUN pip install -U pip && \
+	pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
     rm -f requirements.txt

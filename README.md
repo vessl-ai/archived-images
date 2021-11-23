@@ -43,10 +43,10 @@ make push-all        # Build all images and push them to savvihub/kernels
 |--------|------|----|----------------------------------|
 | 3.6    | x    | ✅ | `savvihub/kernels:py36`          |
 | 3.6    | 10.1 | ✅ | `savvihub/kernels:py36-cuda10.1` | 
-| 3.6    | 11.0 | ✅ | `savvihub/kernels:py36-cuda11.0` |
+| 3.6    | 11.2 | ✅ | `savvihub/kernels:py36-cuda11.2` |
 | 3.7    | x    | ✅ | `savvihub/kernels:py37`          |
 | 3.7    | 10.1 | ✅ | `savvihub/kernels:py37-cuda10.1` |
-| 3.7    | 11.0 | ✅ | `savvihub/kernels:py37-cuda11.0` |
+| 3.7    | 11.2 | ✅ | `savvihub/kernels:py37-cuda11.2` |
 
 
 ### Experiment
@@ -54,20 +54,20 @@ make push-all        # Build all images and push them to savvihub/kernels
 |--------|------|-------------|------------|-------|----|-------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36.full-cpu`          |
 | 3.6    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda10.1.full-gpu` | 
-| 3.6    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda11.0.full-gpu` |
+| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda11.2.full-gpu` |
 | 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37.full-cpu`          |
 | 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu` |
-| 3.7    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda11.0.full-gpu` |
+| 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda11.2.full-gpu` |
 
 ### Workspace (Jupyter)
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                        |
 |--------|------|-------------|------------|-------|---------|----|--------------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36.full-cpu.jupyter`          |
 | 3.6    | 10.1 | 1.6.0+cu101 | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda10.1.full-gpu.jupyter` |
-| 3.6    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda11.0.full-gpu.jupyter` |
+| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda11.2.full-gpu.jupyter` |
 | 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37.full-cpu.jupyter`          |
 | 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu.jupyter` |
-| 3.7    | 11.0 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda11.0.full-gpu.jupyter` |
+| 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda11.2.full-gpu.jupyter` |
  
 
 ## Public Image 
