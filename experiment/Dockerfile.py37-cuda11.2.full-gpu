@@ -2,9 +2,9 @@ FROM public.ecr.aws/vessl/kernels:py37-cuda11.2
 
 ENV MXNET_VERSION 1.6.0
 ENV TF_VERSION 2.4.1
-ENV TORCH_VERSION=1.7.0
-ENV TORCHVISION_VERSION=0.8.1
-ENV TORCHAUDIO_VERSION=0.7.0
+ENV TORCH_VERSION=1.8.1
+ENV TORCHVISION_VERSION=0.9.1
+ENV TORCHAUDIO_VERSION=0.8.1
 ENV TORCHTEXT_VERSION=0.8.0
 ENV TENSORBOARDX_VERSION=2.1
 ENV DEBIAN_FRONTEND=noninteractive
@@ -22,8 +22,8 @@ RUN pip install --no-cache-dir \
     tensorflow-gpu==$TF_VERSION \
     tensorboard==$TF_VERSION \
     tensorwatch==0.9.1 \
-    https://download.pytorch.org/whl/cu110/torch-${TORCH_VERSION}%2Bcu110-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/cu110/torchvision-${TORCHVISION_VERSION}%2Bcu110-cp37-cp37m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/cu111/torch-${TORCH_VERSION}%2Bcu111-cp37-cp37m-linux_x86_64.whl \
+    https://download.pytorch.org/whl/cu111/torchvision-${TORCHVISION_VERSION}%2Bcu111-cp37-cp37m-linux_x86_64.whl \
     https://download.pytorch.org/whl/torchaudio-${TORCHAUDIO_VERSION}-cp37-cp37m-linux_x86_64.whl \
     https://download.pytorch.org/whl/torchtext-${TORCHTEXT_VERSION}-cp37-cp37m-linux_x86_64.whl \
     tensorboardX==${TENSORBOARDX_VERSION} \

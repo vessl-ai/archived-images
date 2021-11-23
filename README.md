@@ -52,7 +52,7 @@ make push-all        # Build all images and push them to public.ecr.aws/vessl/ke
 |--------|------|-------------|------------|-------|----|-------------------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu`          |
 | 3.6    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu` | 
-| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu` |
+| 3.6    | 11.2 | 1.8.1+cu111 | 2.4.1      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu` |
 | 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu`          |
 | 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1.full-gpu` |
 | 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu` |
