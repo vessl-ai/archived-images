@@ -14,7 +14,7 @@ USER root
 RUN pip install --upgrade pip
 
 # Install CLI
-RUN pip install savvihub
+RUN pip install vessl
 
 # Install ML frameworks
 RUN pip install --no-cache-dir \

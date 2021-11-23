@@ -17,7 +17,7 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 RUN pip install awscli==1.20.39
 RUN pip install 'dvc[gs,s3]'==2.7.2
 
-# install savvihub cli
+# install cli
 RUN pip install vessl
 
 # install rsync

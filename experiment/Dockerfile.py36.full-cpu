@@ -1,7 +1,5 @@
 FROM public.ecr.aws/vessl/kernels:py36
 
-MAINTAINER floyd@savvihub.com
-
 ENV MXNET_VERSION 1.6.0
 ENV TF_VERSION 2.2.0
 ENV TORCH_VERSION 1.6.0
@@ -11,7 +9,7 @@ USER root
 RUN pip install --upgrade pip
 
 # Install CLI
-RUN pip install savvihub
+RUN pip install vessl
 
 # Install ML frameworks
 RUN pip install --no-cache-dir \

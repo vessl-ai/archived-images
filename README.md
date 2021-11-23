@@ -1,10 +1,10 @@
 # images
 
-SavviHub images for experiment and workspace
+VESSL images for experiment and workspace
 
 ## Image Description
 ### Data science packages (DS)
-All **SavviHub Images** have the most used data science python package installed. The full list of **DS** packages are as follows.    
+All **VESSL Images** have the most used data science python package installed. The full list of **DS** packages are as follows.    
 ```bash
 numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, tqdm
 ```
@@ -24,50 +24,48 @@ jupyter_tensorboard requires tensorflow<2.2.0
 CUDA 11.0           requires tensorflow>=2.4.0
 ```
 
-
-
-## SavviHub Image
+## VESSL Image
 ### Commands
 ```bash
 # Use deploy script
 python deploy.py --dockerhub {DOCKERHUB_REPO} -t {TAG} {DIR} --push
 
-make push-base       # Build base images and push them to savvihub/kernels 
-make push-experiment # Build experiment images and push them to savvihub/kernels
-make push-workspace  # Build workspace images and push them to savvihub/kernels
-make push-all        # Build all images and push them to savvihub/kernels
+make push-base       # Build base images and push them to public.ecr.aws/vessl/kernels 
+make push-experiment # Build experiment images and push them to public.ecr.aws/vessl/kernels
+make push-workspace  # Build workspace images and push them to public.ecr.aws/vessl/kernels
+make push-all        # Build all images and push them to public.ecr.aws/vessl/kernels
 ```
 
 ### Base
-| Python | CUDA | DS | Image Tag                        |
-|--------|------|----|----------------------------------|
-| 3.6    | x    | ✅ | `savvihub/kernels:py36`          |
-| 3.6    | 10.1 | ✅ | `savvihub/kernels:py36-cuda10.1` | 
-| 3.6    | 11.2 | ✅ | `savvihub/kernels:py36-cuda11.2` |
-| 3.7    | x    | ✅ | `savvihub/kernels:py37`          |
-| 3.7    | 10.1 | ✅ | `savvihub/kernels:py37-cuda10.1` |
-| 3.7    | 11.2 | ✅ | `savvihub/kernels:py37-cuda11.2` |
+| Python | CUDA | DS | Image Tag                                    |
+|--------|------|----|---------------------------------------------|
+| 3.6    | x    | ✅ | `public.ecr.aws/vessl/kernels:py36`          |
+| 3.6    | 10.1 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1` | 
+| 3.6    | 11.2 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2` |
+| 3.7    | x    | ✅ | `public.ecr.aws/vessl/kernels:py37`          |
+| 3.7    | 10.1 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1` |
+| 3.7    | 11.2 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2` |
 
 
 ### Experiment
-| Python | CUDA | PyTorch     | TensorFlow | MXNet | DS | Image Tag                                 |
-|--------|------|-------------|------------|-------|----|-------------------------------------------|
-| 3.6    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36.full-cpu`          |
-| 3.6    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda10.1.full-gpu` | 
-| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py36-cuda11.2.full-gpu` |
-| 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37.full-cpu`          |
-| 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu` |
-| 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `savvihub/kernels:py37-cuda11.2.full-gpu` |
+| Python | CUDA | PyTorch     | TensorFlow | MXNet | DS | Image Tag                                             |
+|--------|------|-------------|------------|-------|----|-------------------------------------------------------|
+| 3.6    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu`          |
+| 3.6    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu` | 
+| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu` |
+| 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu`          |
+| 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1.full-gpu` |
+| 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu` |
 
 ### Workspace (Jupyter)
-| Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                        |
-|--------|------|-------------|------------|-------|---------|----|--------------------------------------------------|
-| 3.6    | x    | 1.6.0       | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36.full-cpu.jupyter`          |
-| 3.6    | 10.1 | 1.6.0+cu101 | 2.1.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda10.1.full-gpu.jupyter` |
-| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py36-cuda11.2.full-gpu.jupyter` |
-| 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37.full-cpu.jupyter`          |
-| 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda10.1.full-gpu.jupyter` |
-| 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `savvihub/kernels:py37-cuda11.2.full-gpu.jupyter` |
+| Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                                    |
+|--------|------|-------------|------------|-------|---------|----|---------------------------------------------------------------|
+| 3.6    | x    | 1.6.0       | 2.1.0      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu.jupyter`          |
+| 3.6    | 10.1 | 1.6.0+cu101 | 2.1.0      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu.jupyter` |
+| 3.6    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu.jupyter` |
+| 3.7    | x    | 1.6.0       | 2.2.0      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu.jupyter`          |
+| 3.7    | 10.1 | 1.6.0+cu101 | 2.2.0      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1.full-gpu.jupyter` |
+| 3.7    | 11.2 | 1.7.0+cu110 | 2.4.1      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu.jupyter` |
  
 
 ## Public Image 

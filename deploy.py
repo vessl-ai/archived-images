@@ -27,7 +27,7 @@ def docker_deploy(dockerhub_repo, tag, push, dockerfile_dir):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dockerhub', type=str, default='savvihub/kernels', help='Docker Hub repository')
+    parser.add_argument('--dockerhub', type=str, default='public.ecr.aws/vessl/kernels', help='Docker Hub repository')
     parser.add_argument('-t', '--tag', type=str, default='latest', help='tagging docker image')
     parser.add_argument('DIR', metavar='DIR', type=str, help='Dockerfile directory')
     parser.add_argument('-p', '--push', default=False, action='store_true', help='Push image to Docker Hub T/F')
