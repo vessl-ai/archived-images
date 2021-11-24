@@ -1,4 +1,4 @@
-FROM public.ecr.aws/vessl/kernels:py37-cuda10.1
+FROM public.ecr.aws/vessl/kernels:py37-cuda10.2
 
 ENV MXNET_VERSION 1.6.0
 ENV TF_VERSION 2.5.2
@@ -22,10 +22,10 @@ RUN pip install --no-cache-dir \
     tensorflow-gpu==$TF_VERSION \
     tensorboard \
     tensorwatch==0.9.1 \
-    https://download.pytorch.org/whl/cu101/torch-${TORCH_VERSION}%2Bcu101-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/cu101/torchvision-${TORCHVISION_VERSION}%2Bcu101-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/torchaudio-${TORCHAUDIO_VERSION}-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/torchtext-${TORCHTEXT_VERSION}-py3-none-any.whl \
+    torch==${TORCH_VERSION} \
+    torchvision==${TORCHVISION_VERSION} \
+    torchaudio==${TORCHAUDIO_VERSION} \
+    torchtext==${TORCHTEXT_VERSION} \
     tensorboardX==${TENSORBOARDX_VERSION} \
     keras keras_applications keras_preprocessing \
     tensorflow-hub==0.5.0 tf2onnx && \

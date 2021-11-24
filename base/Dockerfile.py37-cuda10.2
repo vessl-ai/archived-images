@@ -1,8 +1,8 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHON_VERSION=3.6.14
+ENV PYTHON_VERSION=3.7.11
 ENV PYTHONUNBUFFERED=1 \
     LD_LIBRARY_PATH="/usr/local/ssl/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib64:/usr/include/x86_64-linux-gnu" \
     PATH="/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/mecab"
