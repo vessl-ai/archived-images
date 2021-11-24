@@ -1,5 +1,6 @@
 FROM public.ecr.aws/vessl/kernels:py37-cuda10.1.full-gpu
 
+ENV PATH="/home/vessl/.local/bin:$PATH"
 ENV JUPYTER_ENABLE_LAB=TRUE
 
 USER root

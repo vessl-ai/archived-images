@@ -1,12 +1,13 @@
 FROM public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu
 
+ENV PATH="/home/vessl/.local/bin:$PATH"
 ENV JUPYTER_ENABLE_LAB=TRUE
 
 USER root
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get update && apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Jupyter prerequisite packages
