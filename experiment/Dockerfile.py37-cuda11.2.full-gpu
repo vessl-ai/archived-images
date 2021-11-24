@@ -22,10 +22,10 @@ RUN pip install --no-cache-dir \
     tensorflow-gpu==$TF_VERSION \
     tensorboard \
     tensorwatch==0.9.1 \
-    https://download.pytorch.org/whl/cu111/torch-${TORCH_VERSION}%2Bcu111-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/cu111/torchvision-${TORCHVISION_VERSION}%2Bcu111-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/torchaudio-${TORCHAUDIO_VERSION}-cp37-cp37m-linux_x86_64.whl \
-    https://download.pytorch.org/whl/torchtext-${TORCHTEXT_VERSION}-cp37-cp37m-linux_x86_64.whl \
+    torch==${TORCH_VERSION}+cu111 \
+    torchvision==${TORCHVISION_VERSION}+cu111 \
+    torchaudio==${TORCHAUDIO_VERSION} \
+    torchtext==${TORCHTEXT_VERSION} \
     tensorboardX==${TENSORBOARDX_VERSION} \
     keras keras_applications keras_preprocessing \
     tensorflow-hub==0.5.0 tf2onnx && \

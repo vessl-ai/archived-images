@@ -16,14 +16,6 @@ All images are based on Ubuntu 18.04.
 - `full-cpu` or `full-gpu` tags have three compatible machine learning frameworks installed. (*PyTorch*, *TensorFlow*, *MXNet*)
 - `jupyter`  tags include JupyterLab and some extensions. They start a Jupyter notebook server on boot.
 
-### Disclaimer
-One of the JupyterLab extensions, `jupyter_tensorboard`, is not installed on CUDA 11.0 related images because `tensorflow` conflict error occurs due to [this issue](https://github.com/chaoleili/jupyterlab_tensorboard/issues/25).  
-```bash
-Dependency conflict:
-jupyter_tensorboard requires tensorflow<2.2.0
-CUDA 11.0           requires tensorflow>=2.4.0
-```
-
 ## VESSL Image
 ### Commands
 ```bash
@@ -40,10 +32,10 @@ make push-all        # Build all images and push them to public.ecr.aws/vessl/ke
 | Python | CUDA | DS | Image Tag                                    |
 |--------|------|----|---------------------------------------------|
 | 3.6    | x    | ✅ | `public.ecr.aws/vessl/kernels:py36`          |
-| 3.6    | 10.1 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1` | 
+| 3.6    | 10.2 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.2` | 
 | 3.6    | 11.2 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2` |
 | 3.7    | x    | ✅ | `public.ecr.aws/vessl/kernels:py37`          |
-| 3.7    | 10.1 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1` |
+| 3.7    | 10.2 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.2` |
 | 3.7    | 11.2 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2` |
 
 
@@ -51,20 +43,20 @@ make push-all        # Build all images and push them to public.ecr.aws/vessl/ke
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | DS | Image Tag                                             |
 |--------|------|-------------|------------|-------|----|-------------------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu`          |
-| 3.6    | 10.1 | 1.6.0+cu101 | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu` | 
+| 3.6    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.2.full-gpu` | 
 | 3.6    | 11.2 | 1.8.1+cu111 | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu` |
 | 3.7    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu`          |
-| 3.7    | 10.1 | 1.6.0+cu101 | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1.full-gpu` |
+| 3.7    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.2.full-gpu` |
 | 3.7    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu` |
 
 ### Workspace (Jupyter)
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                                    |
 |--------|------|-------------|------------|-------|---------|----|---------------------------------------------------------------|
 | 3.6    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu.jupyter`          |
-| 3.6    | 10.1 | 1.6.0+cu101 | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.1.full-gpu.jupyter` |
+| 3.6    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.2.full-gpu.jupyter` |
 | 3.6    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu.jupyter` |
 | 3.7    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu.jupyter`          |
-| 3.7    | 10.1 | 1.6.0+cu101 | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.1.full-gpu.jupyter` |
+| 3.7    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.2.full-gpu.jupyter` |
 | 3.7    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu.jupyter` |
  
 
@@ -83,11 +75,11 @@ make push-all        # Build all images and push them to public.ecr.aws/vessl/ke
 | 3.6    | 10.0 | 1.14.0     | `tensorflow/tensorflow:1.14.0-gpu-py3` |
 | 3.6    | x    | 1.15.5     | `tensorflow/tensorflow:1.15.5-py3`     |
 | 3.6    | 10.0 | 1.15.5     | `tensorflow/tensorflow:1.15.5-gpu-py3` |
-| 3.6    | x    | 2.0.4      | `tensorflow/tensorflow:2.0.4-py3`     |
-| 3.6    | 10.0 | 2.0.4      | `tensorflow/tensorflow:2.0.4-gpu-py3` |
-| 3.6    | x    | 2.2.1      | `tensorflow/tensorflow:2.2.1-py3`     |
-| 3.6    | 10.1 | 2.2.1      | `tensorflow/tensorflow:2.2.1-gpu-py3` |
-| 3.6    | x    | 2.3.2      | `tensorflow/tensorflow:2.3.2`      |
-| 3.6    | 10.1 | 2.3.2      | `tensorflow/tensorflow:2.3.2-gpu`  |
-| 3.6    | x    | 2.4.1      | `tensorflow/tensorflow:2.4.1`      |
-| 3.6    | 11.0 | 2.4.1      | `tensorflow/tensorflow:2.4.1-gpu`  |
+| 3.6    | x    | 2.0.4      | `tensorflow/tensorflow:2.0.4-py3`      |
+| 3.6    | 10.0 | 2.0.4      | `tensorflow/tensorflow:2.0.4-gpu-py3`  |
+| 3.6    | x    | 2.2.1      | `tensorflow/tensorflow:2.2.1-py3`      |
+| 3.6    | 10.1 | 2.2.1      | `tensorflow/tensorflow:2.2.1-gpu-py3`  |
+| 3.6    | x    | 2.3.2      | `tensorflow/tensorflow:2.3.2`          |
+| 3.6    | 10.1 | 2.3.2      | `tensorflow/tensorflow:2.3.2-gpu`      |
+| 3.6    | x    | 2.4.1      | `tensorflow/tensorflow:2.4.1`          |
+| 3.6    | 11.0 | 2.4.1      | `tensorflow/tensorflow:2.4.1-gpu`      |
