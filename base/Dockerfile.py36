@@ -10,7 +10,7 @@ USER root
 
 RUN apt-get update && \
     apt-get install -yq --no-install-recommends \
-    	build-essential \
+        build-essential \
         ca-certificates curl \
         gcc g++ git git-core \
         libgeos-dev libgeos++-dev libglib2.0-0 libgl1-mesa-glx libmpdec2 libproj-dev libsndfile1 libssl-dev \
@@ -27,7 +27,7 @@ RUN apt-get update && \
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
 RUN pip install -U pip && \
-	pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
     rm -f requirements.txt
