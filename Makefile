@@ -19,6 +19,9 @@ push-base-py37:
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py37-cuda10.2 base --push
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py37-cuda11.2 base --push
 
+push-base-py310:
+	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py310 base --push
+
 push-experiment: init push-experiment-py36 push-experiment-py37
 
 push-experiment-py36:
@@ -42,5 +45,8 @@ push-workspace-py37:
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py37.full-cpu.jupyter workspace --push
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py37-cuda10.2.full-gpu.jupyter workspace --push
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py37-cuda11.2.full-gpu.jupyter workspace --push
+
+push-workspace-py310:
+	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py310.full-cpu.jupyter workspace --push
 
 push-all: init push-base push-experiment push-workspace
