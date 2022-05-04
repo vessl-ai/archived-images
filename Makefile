@@ -51,4 +51,13 @@ push-workspace-py310:
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py310.full-cpu.jupyter workspace --push
 	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t py310-cuda11.6.full-gpu.jupyter workspace --push
 
+push-ngc-pytorch:
+	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t ngc.pytorch.22.04-py3 ngc --push
+
+push-ngc-tf:
+	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t ngc.tensorflow.22.04-tf1-py3 ngc --push
+	python deploy.py --dockerhub public.ecr.aws/vessl/kernels -t ngc.tensorflow.22.04-tf2-py3 ngc --push
+
+push-ngc: push-ngc-pytorch push-ngc-tf
+
 push-all: init push-base push-experiment push-workspace

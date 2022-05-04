@@ -1,0 +1,27 @@
+FROM nvcr.io/nvidia/tensorflow:22.04-tf2-py3
+
+ENV PATH=/home/vessl/.local/bin:$PATH
+
+USER root
+
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN python -m pip install --upgrade pip
+
+# Install CLI
+RUN python -m pip install --no-cache-dir vessl && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
+
+# Jupyterlab extension install
+RUN jupyter serverextension enable jupyterlab --sys-prefix && \
+    jupyter labextension install --no-build @jupyterlab/toc && \
+    jupyter lab build --dev-build=False --minimize=False
+
+RUN python -m ipykernel install  \
+    	--prefix=/opt/conda \
+    	--display-name "NGC TensorFlow 2 22.04 (conda)" && \
+    cat /opt/conda/share/jupyter/kernels/python3/kernel.json
