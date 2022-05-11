@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-node generate-circleci.js
+node generate-circleci.js && git add .circleci/config.yml
