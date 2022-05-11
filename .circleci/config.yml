@@ -1,0 +1,1027 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@3.4.2
+executors:
+  builder:
+    machine:
+      image: ubuntu-2004:202201-02
+      docker_layer_caching: true
+    resource_class: large
+jobs:
+  tag-validation:
+    executor: builder
+    steps: []
+  build-and-tag_background-container:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels-toolbox:latest
+          command: >-
+            docker build -f ./images/background-container/Dockerfile -t
+            harbor.vessl.ai/public/kernels-toolbox:latest -t
+            harbor.vessl.ai/public/kernels-toolbox:$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels-toolbox:latest -t
+            quay.io/vessl-ai/kernels-toolbox:$CIRCLE_TAG
+            ./images/background-container
+  push-to-harbor_background-container:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels-toolbox:latest
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels-toolbox:$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels-toolbox:latest
+  push-to-quay_background-container:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels-toolbox:latest
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels-toolbox:$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels-toolbox:latest
+  build-and-tag_base_py310:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py310
+          command: >-
+            docker build -f ./images/base/Dockerfile.py310 -t
+            harbor.vessl.ai/public/kernels:py310 -t
+            harbor.vessl.ai/public/kernels:py310-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py310 -t
+            quay.io/vessl-ai/kernels:py310-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py310:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py310-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py310
+  push-to-quay_base_py310:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py310-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py310
+  build-and-tag_base_py310-cuda11-6:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py310-cuda11.6
+          command: >-
+            docker build -f ./images/base/Dockerfile.py310-cuda11.6 -t
+            harbor.vessl.ai/public/kernels:py310-cuda11.6 -t
+            harbor.vessl.ai/public/kernels:py310-cuda11.6-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py310-cuda11.6 -t
+            quay.io/vessl-ai/kernels:py310-cuda11.6-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py310-cuda11-6:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310-cuda11.6
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py310-cuda11.6-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py310-cuda11.6
+  push-to-quay_base_py310-cuda11-6:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310-cuda11.6
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py310-cuda11.6-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py310-cuda11.6
+  build-and-tag_base_py36:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36
+          command: >-
+            docker build -f ./images/base/Dockerfile.py36 -t
+            harbor.vessl.ai/public/kernels:py36 -t
+            harbor.vessl.ai/public/kernels:py36-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36 -t
+            quay.io/vessl-ai/kernels:py36-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py36:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py36-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36
+  push-to-quay_base_py36:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py36-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py36
+  build-and-tag_base_py36-cuda10-2:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36-cuda10.2
+          command: >-
+            docker build -f ./images/base/Dockerfile.py36-cuda10.2 -t
+            harbor.vessl.ai/public/kernels:py36-cuda10.2 -t
+            harbor.vessl.ai/public/kernels:py36-cuda10.2-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36-cuda10.2 -t
+            quay.io/vessl-ai/kernels:py36-cuda10.2-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py36-cuda10-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda10.2
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py36-cuda10.2-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36-cuda10.2
+  push-to-quay_base_py36-cuda10-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda10.2
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py36-cuda10.2-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py36-cuda10.2
+  build-and-tag_base_py36-cuda11-2:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36-cuda11.2
+          command: >-
+            docker build -f ./images/base/Dockerfile.py36-cuda11.2 -t
+            harbor.vessl.ai/public/kernels:py36-cuda11.2 -t
+            harbor.vessl.ai/public/kernels:py36-cuda11.2-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36-cuda11.2 -t
+            quay.io/vessl-ai/kernels:py36-cuda11.2-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py36-cuda11-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda11.2
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py36-cuda11.2-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36-cuda11.2
+  push-to-quay_base_py36-cuda11-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda11.2
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py36-cuda11.2-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py36-cuda11.2
+  build-and-tag_base_py37:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37
+          command: >-
+            docker build -f ./images/base/Dockerfile.py37 -t
+            harbor.vessl.ai/public/kernels:py37 -t
+            harbor.vessl.ai/public/kernels:py37-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37 -t
+            quay.io/vessl-ai/kernels:py37-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py37:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py37-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37
+  push-to-quay_base_py37:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py37-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py37
+  build-and-tag_base_py37-cuda10-2:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37-cuda10.2
+          command: >-
+            docker build -f ./images/base/Dockerfile.py37-cuda10.2 -t
+            harbor.vessl.ai/public/kernels:py37-cuda10.2 -t
+            harbor.vessl.ai/public/kernels:py37-cuda10.2-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37-cuda10.2 -t
+            quay.io/vessl-ai/kernels:py37-cuda10.2-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py37-cuda10-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda10.2
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py37-cuda10.2-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37-cuda10.2
+  push-to-quay_base_py37-cuda10-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda10.2
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py37-cuda10.2-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py37-cuda10.2
+  build-and-tag_base_py37-cuda11-2:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37-cuda11.2
+          command: >-
+            docker build -f ./images/base/Dockerfile.py37-cuda11.2 -t
+            harbor.vessl.ai/public/kernels:py37-cuda11.2 -t
+            harbor.vessl.ai/public/kernels:py37-cuda11.2-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37-cuda11.2 -t
+            quay.io/vessl-ai/kernels:py37-cuda11.2-$CIRCLE_TAG ./images/base
+  push-to-harbor_base_py37-cuda11-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda11.2
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py37-cuda11.2-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37-cuda11.2
+  push-to-quay_base_py37-cuda11-2:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda11.2
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py37-cuda11.2-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py37-cuda11.2
+  build-and-tag_experiment_py36-cuda10-2-full-gpu:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36-cuda10.2.full-gpu
+          command: >-
+            docker build -f
+            ./images/experiment/Dockerfile.py36-cuda10.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu -t
+            quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu-$CIRCLE_TAG
+            ./images/experiment
+  push-to-harbor_experiment_py36-cuda10-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda10.2.full-gpu
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu
+  push-to-quay_experiment_py36-cuda10-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda10.2.full-gpu
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu
+  build-and-tag_experiment_py36-cuda11-2-full-gpu:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36-cuda11.2.full-gpu
+          command: >-
+            docker build -f
+            ./images/experiment/Dockerfile.py36-cuda11.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu -t
+            quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu-$CIRCLE_TAG
+            ./images/experiment
+  push-to-harbor_experiment_py36-cuda11-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda11.2.full-gpu
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu
+  push-to-quay_experiment_py36-cuda11-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda11.2.full-gpu
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu
+  build-and-tag_experiment_py36-full-cpu:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36.full-cpu
+          command: >-
+            docker build -f ./images/experiment/Dockerfile.py36.full-cpu -t
+            harbor.vessl.ai/public/kernels:py36.full-cpu -t
+            harbor.vessl.ai/public/kernels:py36.full-cpu-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36.full-cpu -t
+            quay.io/vessl-ai/kernels:py36.full-cpu-$CIRCLE_TAG
+            ./images/experiment
+  push-to-harbor_experiment_py36-full-cpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36.full-cpu
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py36.full-cpu-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36.full-cpu
+  push-to-quay_experiment_py36-full-cpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36.full-cpu
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py36.full-cpu-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py36.full-cpu
+  build-and-tag_experiment_py37-cuda10-2-full-gpu:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37-cuda10.2.full-gpu
+          command: >-
+            docker build -f
+            ./images/experiment/Dockerfile.py37-cuda10.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu -t
+            quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu-$CIRCLE_TAG
+            ./images/experiment
+  push-to-harbor_experiment_py37-cuda10-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda10.2.full-gpu
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu
+  push-to-quay_experiment_py37-cuda10-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda10.2.full-gpu
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu
+  build-and-tag_experiment_py37-cuda11-2-full-gpu:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37-cuda11.2.full-gpu
+          command: >-
+            docker build -f
+            ./images/experiment/Dockerfile.py37-cuda11.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu -t
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu -t
+            quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu-$CIRCLE_TAG
+            ./images/experiment
+  push-to-harbor_experiment_py37-cuda11-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda11.2.full-gpu
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu
+  push-to-quay_experiment_py37-cuda11-2-full-gpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda11.2.full-gpu
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu
+  build-and-tag_experiment_py37-full-cpu:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37.full-cpu
+          command: >-
+            docker build -f ./images/experiment/Dockerfile.py37.full-cpu -t
+            harbor.vessl.ai/public/kernels:py37.full-cpu -t
+            harbor.vessl.ai/public/kernels:py37.full-cpu-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37.full-cpu -t
+            quay.io/vessl-ai/kernels:py37.full-cpu-$CIRCLE_TAG
+            ./images/experiment
+  push-to-harbor_experiment_py37-full-cpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37.full-cpu
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push harbor.vessl.ai/public/kernels:py37.full-cpu-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37.full-cpu
+  push-to-quay_experiment_py37-full-cpu:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37.full-cpu
+          command: |-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+            docker push quay.io/vessl-ai/kernels:py37.full-cpu-$CIRCLE_TAG
+            docker push quay.io/vessl-ai/kernels:py37.full-cpu
+  build-and-tag_ngc_ngc-pytorch-22-04-py3:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:ngc.pytorch.22.04-py3
+          command: >-
+            docker build -f ./images/ngc/Dockerfile.ngc.pytorch.22.04-py3 -t
+            harbor.vessl.ai/public/kernels:ngc.pytorch.22.04-py3 -t
+            harbor.vessl.ai/public/kernels:ngc.pytorch.22.04-py3-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:ngc.pytorch.22.04-py3 -t
+            quay.io/vessl-ai/kernels:ngc.pytorch.22.04-py3-$CIRCLE_TAG
+            ./images/ngc
+  push-to-harbor_ngc_ngc-pytorch-22-04-py3:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:ngc.pytorch.22.04-py3
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:ngc.pytorch.22.04-py3-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:ngc.pytorch.22.04-py3
+  push-to-quay_ngc_ngc-pytorch-22-04-py3:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:ngc.pytorch.22.04-py3
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:ngc.pytorch.22.04-py3-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:ngc.pytorch.22.04-py3
+  build-and-tag_ngc_ngc-tensorflow-22-04-tf1-py3:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:ngc.tensorflow.22.04-tf1-py3
+          command: >-
+            docker build -f ./images/ngc/Dockerfile.ngc.tensorflow.22.04-tf1-py3
+            -t harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf1-py3 -t
+            harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf1-py3-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf1-py3 -t
+            quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf1-py3-$CIRCLE_TAG
+            ./images/ngc
+  push-to-harbor_ngc_ngc-tensorflow-22-04-tf1-py3:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:ngc.tensorflow.22.04-tf1-py3
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf1-py3-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf1-py3
+  push-to-quay_ngc_ngc-tensorflow-22-04-tf1-py3:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:ngc.tensorflow.22.04-tf1-py3
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf1-py3-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf1-py3
+  build-and-tag_ngc_ngc-tensorflow-22-04-tf2-py3:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:ngc.tensorflow.22.04-tf2-py3
+          command: >-
+            docker build -f ./images/ngc/Dockerfile.ngc.tensorflow.22.04-tf2-py3
+            -t harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf2-py3 -t
+            harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf2-py3-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf2-py3 -t
+            quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf2-py3-$CIRCLE_TAG
+            ./images/ngc
+  push-to-harbor_ngc_ngc-tensorflow-22-04-tf2-py3:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:ngc.tensorflow.22.04-tf2-py3
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf2-py3-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:ngc.tensorflow.22.04-tf2-py3
+  push-to-quay_ngc_ngc-tensorflow-22-04-tf2-py3:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:ngc.tensorflow.22.04-tf2-py3
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf2-py3-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:ngc.tensorflow.22.04-tf2-py3
+  build-and-tag_workspace_py310-cuda11-6-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py310-cuda11.6.full-gpu.jupyter
+          command: >-
+            docker build -f
+            ./images/workspace/Dockerfile.py310-cuda11.6.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py310-cuda11.6.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py310-cuda11.6.full-gpu.jupyter-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:py310-cuda11.6.full-gpu.jupyter -t
+            quay.io/vessl-ai/kernels:py310-cuda11.6.full-gpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py310-cuda11-6-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310-cuda11.6.full-gpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py310-cuda11.6.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:py310-cuda11.6.full-gpu.jupyter
+  push-to-quay_workspace_py310-cuda11-6-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310-cuda11.6.full-gpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py310-cuda11.6.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py310-cuda11.6.full-gpu.jupyter
+  build-and-tag_workspace_py310-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py310.full-cpu.jupyter
+          command: >-
+            docker build -f ./images/workspace/Dockerfile.py310.full-cpu.jupyter
+            -t harbor.vessl.ai/public/kernels:py310.full-cpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py310.full-cpu.jupyter-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py310.full-cpu.jupyter -t
+            quay.io/vessl-ai/kernels:py310.full-cpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py310-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310.full-cpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py310.full-cpu.jupyter-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py310.full-cpu.jupyter
+  push-to-quay_workspace_py310-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py310.full-cpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py310.full-cpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py310.full-cpu.jupyter
+  build-and-tag_workspace_py36-cuda10-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36-cuda10.2.full-gpu.jupyter
+          command: >-
+            docker build -f
+            ./images/workspace/Dockerfile.py36-cuda10.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu.jupyter -t
+            quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py36-cuda10-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda10.2.full-gpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36-cuda10.2.full-gpu.jupyter
+  push-to-quay_workspace_py36-cuda10-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda10.2.full-gpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu.jupyter
+  build-and-tag_workspace_py36-cuda11-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36-cuda11.2.full-gpu.jupyter
+          command: >-
+            docker build -f
+            ./images/workspace/Dockerfile.py36-cuda11.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu.jupyter -t
+            quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py36-cuda11-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda11.2.full-gpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36-cuda11.2.full-gpu.jupyter
+  push-to-quay_workspace_py36-cuda11-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36-cuda11.2.full-gpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu.jupyter
+  build-and-tag_workspace_py36-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py36.full-cpu.jupyter
+          command: >-
+            docker build -f ./images/workspace/Dockerfile.py36.full-cpu.jupyter
+            -t harbor.vessl.ai/public/kernels:py36.full-cpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py36.full-cpu.jupyter-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py36.full-cpu.jupyter -t
+            quay.io/vessl-ai/kernels:py36.full-cpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py36-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36.full-cpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py36.full-cpu.jupyter-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py36.full-cpu.jupyter
+  push-to-quay_workspace_py36-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py36.full-cpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py36.full-cpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py36.full-cpu.jupyter
+  build-and-tag_workspace_py37-cuda10-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37-cuda10.2.full-gpu.jupyter
+          command: >-
+            docker build -f
+            ./images/workspace/Dockerfile.py37-cuda10.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu.jupyter -t
+            quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py37-cuda10-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda10.2.full-gpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37-cuda10.2.full-gpu.jupyter
+  push-to-quay_workspace_py37-cuda10-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda10.2.full-gpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu.jupyter
+  build-and-tag_workspace_py37-cuda11-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37-cuda11.2.full-gpu.jupyter
+          command: >-
+            docker build -f
+            ./images/workspace/Dockerfile.py37-cuda11.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+            -t quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu.jupyter -t
+            quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py37-cuda11-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda11.2.full-gpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37-cuda11.2.full-gpu.jupyter
+  push-to-quay_workspace_py37-cuda11-2-full-gpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37-cuda11.2.full-gpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu.jupyter
+  build-and-tag_workspace_py37-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: Build kernels:py37.full-cpu.jupyter
+          command: >-
+            docker build -f ./images/workspace/Dockerfile.py37.full-cpu.jupyter
+            -t harbor.vessl.ai/public/kernels:py37.full-cpu.jupyter -t
+            harbor.vessl.ai/public/kernels:py37.full-cpu.jupyter-$CIRCLE_TAG -t
+            quay.io/vessl-ai/kernels:py37.full-cpu.jupyter -t
+            quay.io/vessl-ai/kernels:py37.full-cpu.jupyter-$CIRCLE_TAG
+            ./images/workspace
+  push-to-harbor_workspace_py37-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37.full-cpu.jupyter
+          command: >-
+
+            echo $HARBOR_PASSWORD | docker login -u $HARBOR_USER
+            --password-stdin
+
+            docker push
+            harbor.vessl.ai/public/kernels:py37.full-cpu.jupyter-$CIRCLE_TAG
+
+            docker push harbor.vessl.ai/public/kernels:py37.full-cpu.jupyter
+  push-to-quay_workspace_py37-full-cpu-jupyter:
+    executor: builder
+    steps:
+      - run:
+          name: Push kernels:py37.full-cpu.jupyter
+          command: >-
+
+            echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin
+
+            docker push
+            quay.io/vessl-ai/kernels:py37.full-cpu.jupyter-$CIRCLE_TAG
+
+            docker push quay.io/vessl-ai/kernels:py37.full-cpu.jupyter
+workflows:
+  build-docker-images:
+    jobs:
+      - tag-validation:
+          filters:
+            tags:
+              only: /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+            branches:
+              ignore: /.*/

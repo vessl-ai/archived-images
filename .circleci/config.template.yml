@@ -1,0 +1,26 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+
+executors:
+  builder:
+    machine:
+      image: ubuntu-2004:202201-02
+      docker_layer_caching: true
+    resource_class: large
+
+jobs:
+  tag-validation:
+    executor: builder
+    steps: []
+
+workflows:
+  build-docker-images:
+    jobs:
+      - tag-validation:
+          filters:
+            tags:
+              only: /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+            branches:
+              ignore: /.*/

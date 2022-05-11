@@ -1,0 +1,27 @@
+{
+  "name": "images",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "VESSL images for experiment and workspace # EVERYTHING UNDER THIS LINE IS OUTDATED.",
+  "main": "generate-circleci.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vessl-ai/images.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vessl-ai/images/issues"
+  },
+  "homepage": "https://github.com/vessl-ai/images#readme",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "husky": "^8.0.1"
+  }
+}

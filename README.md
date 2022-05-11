@@ -1,6 +1,8 @@
 # images
 
 VESSL images for experiment and workspace
+# EVERYTHING UNDER THIS LINE IS OUTDATED.
+
 
 ## Image Description
 ### Data science packages (DS)
