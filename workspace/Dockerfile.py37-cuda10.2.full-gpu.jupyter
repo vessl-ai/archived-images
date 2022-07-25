@@ -1,4 +1,4 @@
-FROM public.ecr.aws/vessl/kernels:py37-cuda10.2.full-gpu
+FROM quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu
 
 ENV PATH="/home/vessl/.local/bin:$PATH"
 ENV JUPYTER_ENABLE_LAB=TRUE
