@@ -2,10 +2,10 @@ init:
 	@echo "Get CLI password from quay.io/user/<username>?tab=settings"
 
 run_image:
-	docker run -td quay.io/repository/vessl-ai/kernels:$(tag)
+	docker run --platform=linux/amd64 -td quay.io/repository/vessl-ai/kernels:$(tag)
 
 run_jupyter:
-	docker run -td -p 8888:8888 quay.io/repository/vessl-ai/kernels:$(tag)
+	docker run --platform=linux/amd64 -td -p 8888:8888 quay.io/repository/vessl-ai/kernels:$(tag)
 
 push-base: init push-base-py36 push-base-py37
 
