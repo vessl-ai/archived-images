@@ -1,4 +1,4 @@
-FROM public.ecr.aws/vessl/kernels:py37.full-cpu
+FROM quay.io/vessl-ai/kernels:py37.full-cpu
 
 ENV PATH="/home/vessl/.local/bin:$PATH"
 ENV JUPYTER_ENABLE_LAB=TRUE

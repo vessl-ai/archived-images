@@ -1,4 +1,4 @@
-FROM public.ecr.aws/vessl/kernels:py36-cuda11.2
+FROM quay.io/vessl-ai/kernels:py36-cuda11.2
 
 ENV MXNET_VERSION 1.6.0
 ENV TF_VERSION 2.5.2

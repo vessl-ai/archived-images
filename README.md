@@ -22,42 +22,42 @@ All images are based on Ubuntu 18.04.
 # Use deploy script
 python deploy.py --dockerhub {DOCKERHUB_REPO} -t {TAG} {DIR} --push
 
-make push-base       # Build base images and push them to public.ecr.aws/vessl/kernels 
-make push-experiment # Build experiment images and push them to public.ecr.aws/vessl/kernels
-make push-workspace  # Build workspace images and push them to public.ecr.aws/vessl/kernels
-make push-all        # Build all images and push them to public.ecr.aws/vessl/kernels
+make push-base       # Build base images and push them to quay.io/vessl-ai/kernels 
+make push-experiment # Build experiment images and push them to quay.io/vessl-ai/kernels
+make push-workspace  # Build workspace images and push them to quay.io/vessl-ai/kernels
+make push-all        # Build all images and push them to quay.io/vessl-ai/kernels
 ```
 
 ### Base
 | Python | CUDA | DS | Image Tag                                    |
 |--------|------|----|---------------------------------------------|
-| 3.6    | x    | ✅ | `public.ecr.aws/vessl/kernels:py36`          |
-| 3.6    | 10.2 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.2` | 
-| 3.6    | 11.2 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2` |
-| 3.7    | x    | ✅ | `public.ecr.aws/vessl/kernels:py37`          |
-| 3.7    | 10.2 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.2` |
-| 3.7    | 11.2 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2` |
+| 3.6    | x    | ✅ | `quay.io/vessl-ai/kernels:py36`          |
+| 3.6    | 10.2 | ✅ | `quay.io/vessl-ai/kernels:py36-cuda10.2` | 
+| 3.6    | 11.2 | ✅ | `quay.io/vessl-ai/kernels:py36-cuda11.2` |
+| 3.7    | x    | ✅ | `quay.io/vessl-ai/kernels:py37`          |
+| 3.7    | 10.2 | ✅ | `quay.io/vessl-ai/kernels:py37-cuda10.2` |
+| 3.7    | 11.2 | ✅ | `quay.io/vessl-ai/kernels:py37-cuda11.2` |
 
 
 ### Experiment
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | DS | Image Tag                                             |
 |--------|------|-------------|------------|-------|----|-------------------------------------------------------|
-| 3.6    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu`          |
-| 3.6    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.2.full-gpu` | 
-| 3.6    | 11.2 | 1.8.1+cu111 | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu` |
-| 3.7    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu`          |
-| 3.7    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.2.full-gpu` |
-| 3.7    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu` |
+| 3.6    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `quay.io/vessl-ai/kernels:py36.full-cpu`          |
+| 3.6    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu` | 
+| 3.6    | 11.2 | 1.8.1+cu111 | 2.5.2      | 1.6.0 | ✅ | `quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu` |
+| 3.7    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `quay.io/vessl-ai/kernels:py37.full-cpu`          |
+| 3.7    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅ | `quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu` |
+| 3.7    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅ | `quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu` |
 
 ### Workspace (Jupyter)
 | Python | CUDA | PyTorch     | TensorFlow | MXNet | Jupyter | DS | Image Tag                                                    |
 |--------|------|-------------|------------|-------|---------|----|---------------------------------------------------------------|
-| 3.6    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36.full-cpu.jupyter`          |
-| 3.6    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda10.2.full-gpu.jupyter` |
-| 3.6    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py36-cuda11.2.full-gpu.jupyter` |
-| 3.7    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37.full-cpu.jupyter`          |
-| 3.7    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda10.2.full-gpu.jupyter` |
-| 3.7    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅      | ✅ | `public.ecr.aws/vessl/kernels:py37-cuda11.2.full-gpu.jupyter` |
+| 3.6    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `quay.io/vessl-ai/kernels:py36.full-cpu.jupyter`          |
+| 3.6    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `quay.io/vessl-ai/kernels:py36-cuda10.2.full-gpu.jupyter` |
+| 3.6    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅      | ✅ | `quay.io/vessl-ai/kernels:py36-cuda11.2.full-gpu.jupyter` |
+| 3.7    | x    | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `quay.io/vessl-ai/kernels:py37.full-cpu.jupyter`          |
+| 3.7    | 10.2 | 1.6.0       | 2.5.2      | 1.6.0 | ✅      | ✅ | `quay.io/vessl-ai/kernels:py37-cuda10.2.full-gpu.jupyter` |
+| 3.7    | 11.2 | 1.7.0+cu110 | 2.5.2      | 1.6.0 | ✅      | ✅ | `quay.io/vessl-ai/kernels:py37-cuda11.2.full-gpu.jupyter` |
  
 
 ## Public Image 
