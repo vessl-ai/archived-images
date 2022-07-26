@@ -1,6 +1,6 @@
 FROM nvcr.io/nvidia/tensorflow:22.04-tf2-py3
 
-ENV PATH=/home/vessl/.local/bin:$PATH
+ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 
 USER root
 

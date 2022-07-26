@@ -1,6 +1,6 @@
 FROM nvcr.io/nvidia/pytorch:22.04-py3
 
-ENV PATH=/home/vessl/.local/bin:$PATH
+ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 
 USER root
 
