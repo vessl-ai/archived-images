@@ -1,25 +1,29 @@
 import argparse
 import subprocess
 from pathlib import Path
+from datetime import datetime
 
 
 def run(cmd):
     return subprocess.run(cmd, shell=True, check=True)
 
 
-def docker_deploy(dockerhub_repo, tag, push, dockerfile_dir):
+def docker_deploy(dockerhub_repo, tag_prefix, push, dockerfile_dir):
     if not Path(dockerfile_dir).is_dir():
         print(f'Docker directory does not found')
         exit()
 
-    dockerfile_path = Path(dockerfile_dir) / f'Dockerfile.{tag}'
+    dockerfile_path = Path(dockerfile_dir) / f'Dockerfile.{tag_prefix}'
+    print(dockerfile_path.resolve())
     if not Path(dockerfile_path).is_file():
-        print(f'Dockerfile does not found')
+        print(f'Dockerfile not found')
         exit()
 
-    print(f'Building {dockerfile_path}')
 
-    tag_ref = "{}:{}".format(dockerhub_repo, tag)
+    now = datetime.now().strftime("%Y%m%d%H%M")
+    tag_ref = "{}:{}-{}".format(dockerhub_repo, tag_prefix, now)
+
+    print(f'Building {dockerfile_path} with tag {tag_ref}')
     run(f'docker build --platform=linux/amd64 -t {tag_ref} -f {dockerfile_path} {dockerfile_dir}')
     if push:
         run(f'docker push {tag_ref}')
