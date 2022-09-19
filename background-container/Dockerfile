@@ -18,7 +18,7 @@ RUN pip install awscli==1.20.39
 RUN pip install 'dvc[gs,s3]'==2.7.2
 
 # install cli
-RUN pip install vessl==0.1.63
+RUN pip install vessl==0.1.71
 
 # install rsync
 RUN apt-get install rsync -y
