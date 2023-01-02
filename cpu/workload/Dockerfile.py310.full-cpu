@@ -1,5 +1,11 @@
 FROM quay.io/vessl-ai/kernels:py310
 
+ENV MXNET_VERSION 1.9.1
+ENV TF_VERSION 2.9.2
+ENV TORCH_VERSION 1.12.1
+ENV TORCHVISION_VERSION 0.13.1
+ENV TF_HUB 0.12.0
+
 ENV PATH="/home/vessl/.local/bin:$PATH"
 ENV JUPYTER_ENABLE_LAB=TRUE
 
@@ -8,14 +14,16 @@ USER root
 RUN pip install --upgrade pip
 
 # Install CLI
-RUN pip install --no-cache-dir vessl && \
-    rm -rf /root/.cache && \
-    rm -f /tmp/*.whl
+RUN pip install --no-cache-dir vessl
 
-# Install ML frameworks
 RUN pip install --no-cache-dir \
-    tensorflow==2.8.0 \
-    torch==1.11.0 && \
+    mxnet==$MXNET_VERSION \
+    tensorflow==$TF_VERSION \
+    tensorboard \
+    torch==${TORCH_VERSION} \
+    torchvision==${TORCHVISION_VERSION} \
+    keras keras_applications keras_preprocessing \
+    tensorflow-hub==$TF_HUB tf2onnx && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl
 
