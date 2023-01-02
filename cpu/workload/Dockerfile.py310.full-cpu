@@ -40,6 +40,7 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 
 # Jupyterlab extension install
 RUN jupyter serverextension enable --py jupyterlab --sys-prefix
+
 RUN jupyter labextension install --no-build @jupyterlab/git && \
     jupyter labextension install --no-build @jupyterlab/toc && \
     jupyter lab build --dev-build=False --minimize=False
