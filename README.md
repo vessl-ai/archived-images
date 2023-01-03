@@ -24,10 +24,10 @@ WIP
 ### CPU - Base
 | Python | CUDA | Image Tag                                    |
 |--------|------|----|---------------------------------------------|
-| 3.7    | x    | `python:3.7.11-slim`          |
-| 3.8    | x    | `python:3.8.16-slim`          |
-| 3.9    | x    | `python:3.9.16-slim`          |
-| 3.10    | x    | `python:3.10.9-slim`          |
+| 3.7    | x    | `python:3.7.11-slim-buster`          |
+| 3.8    | x    | `python:3.8.16-slim-buster`          |
+| 3.9    | x    | `python:3.9.16-slim-buster`          |
+| 3.10    | x    | `python:3.10.9-slim-buster`          |
 
 
 ### CPU - Workload
