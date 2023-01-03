@@ -84,7 +84,7 @@ RUN jupyter labextension install --no-build @jupyterlab/git && \
     jupyter lab build --dev-build=False --minimize=False
 
 # Install ipython kernelspec
-RUN python -m ipykernel install --display-name "Full on Python 3.10 (CPU-only)" && \
+RUN python -m ipykernel install --display-name "Full on Python 3.8 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
 COPY start-notebook.sh /usr/local/bin/
