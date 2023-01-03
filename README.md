@@ -24,17 +24,15 @@ WIP
 ### CPU - Base
 | Python | CUDA | Image Tag                                    |
 |--------|------|----|---------------------------------------------|
-| 3.6    | x    | `python:3.6.14-slim-buster`          |
-| 3.7    | x    | `python:3.7.11-slim-buster`          |
-| 3.8    | x    | `python:3.8.16-slim-buster`          |
-| 3.9    | x    | `python:3.9.16-slim-buster`          |
-| 3.10    | x    | `python:3.10.4-slim-buster`          |
+| 3.7    | x    | `python:3.7.11-alpine`          |
+| 3.8    | x    | `python:3.8.16-alpine`          |
+| 3.9    | x    | `python:3.9.16-alpine`          |
+| 3.10    | x    | `python:3.10.9-alpine`          |
 
 
 ### CPU - Workload
 | Python | CUDA | DS | Image Tag                                    |
 |--------|------|----|---------------------------------------------|
-| 3.6    | x    | ✅ | `quay.io/vessl-ai/kernels:py36`          |
 | 3.7    | x    | ✅ | `quay.io/vessl-ai/kernels:py37`          |
 | 3.8    | x    | ✅ | `quay.io/vessl-ai/kernels:py38`          |
 | 3.9    | x    | ✅ | `quay.io/vessl-ai/kernels:py39`          |
