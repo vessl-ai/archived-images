@@ -43,8 +43,8 @@ WIP
 
 ### NGC - Workload
 
-vessl gpu image would be based on NGC's image. So if you want to find depenecy libraries then check the release note.
+VESSL-supported GPU images are based on NVIDIA's NGC Image. You may want to check this site(link) to investigate what's inside.
 
-You can find NGC torch image Release Note. [Check Link](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/index.html)
 
-You can find NGC tensorflow image Release Note. [Check Link](https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/index.html)
+* [torch](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/index.html)
+* [tensorflow](https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/index.html)
