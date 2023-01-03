@@ -13,7 +13,7 @@ numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, 
 - `py3x` tags indicate python version **3.x**
 - `full-cpu` or `full-gpu` tags have three compatible machine learning frameworks installed. (*PyTorch*, *TensorFlow*, *MXNet*)
 - `tf1`, `tf2` tags indicate tensorflow version based on NGC
-- `toruch` tags indicate torch version based on NGC
+- `torch` tags indicate torch version based on NGC
 
 ## VESSL Image
 ### Commands
@@ -31,7 +31,7 @@ WIP
 | 3.10    | x    | `python:3.10.4-slim-buster`          |
 
 
-### CPU - Worklad
+### CPU - Workload
 | Python | CUDA | DS | Image Tag                                    |
 |--------|------|----|---------------------------------------------|
 | 3.6    | x    | ✅ | `quay.io/vessl-ai/kernels:py36`          |
@@ -41,7 +41,7 @@ WIP
 | 3.10    | x    | ✅ | `quay.io/vessl-ai/kernels:py310`          |
 
 
-### NGC - Worklad
+### NGC - Workload
 
 vessl gpu image would be based on NGC's image. So if you want to find depenecy libraries then check the release note.
 
