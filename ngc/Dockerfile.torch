@@ -18,7 +18,6 @@ RUN python -m pip install --no-cache-dir vessl && \
 
 # Jupyterlab extension install
 RUN jupyter serverextension enable jupyterlab --sys-prefix && \
-    jupyter labextension install --no-build @jupyterlab/toc && \
     jupyter lab build --dev-build=False --minimize=False
 
 RUN python -m ipykernel install  \

@@ -80,7 +80,6 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 RUN jupyter serverextension enable --py jupyterlab --sys-prefix
 
 RUN jupyter labextension install --no-build @jupyterlab/git && \
-    jupyter labextension install --no-build @jupyterlab/toc && \
     jupyter lab build --dev-build=False --minimize=False
 
 # Install ipython kernelspec
