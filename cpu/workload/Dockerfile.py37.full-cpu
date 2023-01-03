@@ -40,7 +40,7 @@ RUN pip install --no-cache-dir -r requirements.txt && \
     rm -f requirements.txt
 
 # Install Jupyter requirements
-COPY requirements.jupyter.py310.txt requirements.txt
+COPY requirements.jupyter.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
