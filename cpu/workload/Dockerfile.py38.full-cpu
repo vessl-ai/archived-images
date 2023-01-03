@@ -1,4 +1,4 @@
-FROM quay.io/vessl-ai/kernels:py37
+FROM quay.io/vessl-ai/kernels:py38
 
 ENV MXNET_VERSION 1.9.1
 ENV TF_VERSION 2.9.2
