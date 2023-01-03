@@ -1,0 +1,1 @@
+jupyterlab-git==0.24.0

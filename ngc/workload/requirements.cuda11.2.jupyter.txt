@@ -1,3 +1,0 @@
-jupyter
-jupyterlab==2.2.9
-jupyterlab-git==0.23.3
