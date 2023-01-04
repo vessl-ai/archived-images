@@ -21,22 +21,14 @@ numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, 
 WIP
 ```
 
-### CPU - Base
-| Python | CUDA | Image Tag                                    |
-|--------|------|----|---------------------------------------------|
-| 3.7    | x    | `python:3.7.11-slim-buster`          |
-| 3.8    | x    | `python:3.8.16-slim-buster`          |
-| 3.9    | x    | `python:3.9.16-slim-buster`          |
-| 3.10    | x    | `python:3.10.9-slim-buster`          |
 
-
-### CPU - Workload
-| Python | CUDA | DS | Image Tag                                    |
-|--------|------|----|---------------------------------------------|
-| 3.7    | x    | ✅ | `quay.io/vessl-ai/kernels:py37`          |
-| 3.8    | x    | ✅ | `quay.io/vessl-ai/kernels:py38`          |
-| 3.9    | x    | ✅ | `quay.io/vessl-ai/kernels:py39`          |
-| 3.10    | x    | ✅ | `quay.io/vessl-ai/kernels:py310`          |
+### CPU
+| Python | CUDA | DS | ML Frameworks | Jupyterlab | Image Tag                                    |
+|:--------:|:------:|:----:|:----:|:--:|:---------------------------------------:|
+| 3.7    | x    | ✅ | ✅ | ✅ | `python:3.7.11-slim-buster`          |
+| 3.8    | x    | ✅ | ✅ | ✅ | `python:3.8.16-slim-buster`          |
+| 3.9    | x    | ✅ | ✅ | ✅ | `python:3.9.16-slim-buster`          |
+| 3.10    | x    | ✅ | ✅ | ✅ | `python:3.10.9-slim-buster`          |
 
 
 ### NGC - Workload
