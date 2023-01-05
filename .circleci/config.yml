@@ -3,8 +3,11 @@ version: 2.1
 commands:
   push-docker-image:
     parameters:
+      filename:
+        type: string
       repo:
         type: string
+        default: test
       tag:
         default: latest
         type: string
@@ -17,27 +20,59 @@ commands:
           command: docker login -u $QUAY_FRONTEND_ACCOUNT_USERNAME -p $QUAY_FRONTEND_ACCOUNT_PASSWORD quay.io
       - run:
           name: docker build
-          command: docker build -f ./ngc/Dockerfile.<<parameters.repo>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>> .
+          command: docker build -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>> .
       - run:
           name: docker push
           command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>
 
 
 jobs:
-  push:
+  push-tf1:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - push-docker-image:
-          repo: "py3-tf2-ngc"
+          filename: "py3-tf-ngc"
+          tag: "tf1-22.04"
+  push-tf2:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "tf2-22.04"
+  push-torch:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-torch-ngc"
           tag: "22.04"
     
 
 workflows: 
   main:  
     jobs:
-      - push:
+      - push-tf1:
+          context:
+            - quay-creds
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4006
+      - push-tf2:
+          context:
+            - quay-creds
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4006
+      - push-torch:
           context:
             - quay-creds
           filters:
