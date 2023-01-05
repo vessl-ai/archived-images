@@ -12,5 +12,5 @@ jobs:
 workflows: 
   main:  
     jobs:
-      - say-hello:
+      - say-hello
 
