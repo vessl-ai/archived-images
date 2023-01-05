@@ -63,7 +63,6 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
       - push-tf2:
           context:
             - quay-creds
@@ -71,7 +70,6 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
       - push-torch:
           context:
             - quay-creds
@@ -79,4 +77,3 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
