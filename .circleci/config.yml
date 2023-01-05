@@ -20,7 +20,7 @@ commands:
           command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
           name: docker build
-          command: docker build -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>> .
+          command: docker build -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>$(date +'%Y%m%d%H%M') .
       - run:
           name: docker push
           command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>
