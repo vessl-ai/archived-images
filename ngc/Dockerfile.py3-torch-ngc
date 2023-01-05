@@ -1,4 +1,5 @@
-FROM nvcr.io/nvidia/pytorch:22.04-py3
+ARG NGC_TAG
+FROM nvcr.io/nvidia/pytorch:$NGC_TAG
 
 ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 
