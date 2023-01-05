@@ -20,7 +20,7 @@ commands:
           command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
           name: docker build
-          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>$(date +'%Y%m%d%H%M') .
+          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$(date +'%Y%m%d%H%M') .
       - run:
           name: docker push
           command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>
@@ -50,8 +50,7 @@ jobs:
       - checkout
       - push-docker-image:
           filename: "py3-torch-ngc"
-          tag: "22.04-py3
-"
+          tag: "22.04-py3"
     
 
 workflows: 
