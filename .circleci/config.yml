@@ -11,6 +11,9 @@ commands:
       tag:
         default: latest
         type: string
+      path:
+        default: ngc
+        type: string
     steps:
       - setup_remote_docker:
           version: 20.10.17
@@ -23,7 +26,7 @@ commands:
           command: export TAG_DATE=$(date +'%Y%m%d%H%M')
       - run:
           name: docker build
-          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
+          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./<<parameters.path>>/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
       - run:
           name: docker push
           command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE
@@ -54,7 +57,15 @@ jobs:
       - push-docker-image:
           filename: "py3-torch-ngc"
           tag: "22.04-py3"
-    
+  push-py3x-cpu:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py310"
+          tag: "py310"
+          path: "cpu"
 
 workflows: 
   main:  
@@ -76,6 +87,14 @@ workflows:
                 - main
                 - vssl-4006
       - push-torch-ngc:
+          context:
+            - quay-creds
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4006
+      - push-py3x-cpu:
           context:
             - quay-creds
           filters:
