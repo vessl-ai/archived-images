@@ -23,14 +23,14 @@ commands:
           command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
           name: store timestamp
-          command: export TAG_DATE=$(date +'%Y%m%d%H%M')
+          command: export TAG_DATE=$(date +'%Y%m%d%H%M') | echo $TAG_DATE
+      - run: cd ./<<parameters.path>>
       - run:
           name: docker build
           command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./<<parameters.path>>/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
       - run:
           name: docker push
           command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE
-
 
 jobs:
   push-tf1-ngc:
@@ -77,7 +77,6 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
       - push-tf2-ngc:
           context:
             - quay-creds
@@ -85,7 +84,6 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
       - push-torch-ngc:
           context:
             - quay-creds
@@ -93,7 +91,6 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
       - push-py3x-cpu:
           context:
             - quay-creds
@@ -101,4 +98,3 @@ workflows:
             branches:
               only:
                 - main
-                - vssl-4006
