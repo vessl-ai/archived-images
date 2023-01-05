@@ -19,11 +19,14 @@ commands:
           name: docker login
           command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
+          name: store timestamp
+          command: export TAG_DATE=$(date +'%Y%m%d%H%M')
+      - run:
           name: docker build
-          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$(date +'%Y%m%d%H%M') .
+          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
       - run:
           name: docker push
-          command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>
+          command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE
 
 
 jobs:
