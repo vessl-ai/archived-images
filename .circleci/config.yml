@@ -1,16 +1,80 @@
 version: 2.1
 
+commands:
+  push-docker-image:
+    parameters:
+      filename:
+        type: string
+      repo:
+        type: string
+        default: test
+      tag:
+        default: latest
+        type: string
+    steps:
+      - setup_remote_docker:
+          version: 20.10.17
+          docker_layer_caching: true
+      - run:
+          name: docker login
+          command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
+      - run:
+          name: docker build
+          command: docker build --build-arg NGC_TAG=<<parameters.tag>> -f ./ngc/Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>$(date +'%Y%m%d%H%M') .
+      - run:
+          name: docker push
+          command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>
+
+
 jobs:
-  say-hello:
+  push-tf1-ngc:
     docker:
       - image: cimg/base:stable
     steps:
-      - run:
-          name: "Say Hello World"
-          command: "echo Hello World"
+      - checkout
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "22.04-tf1-py3"
+  push-tf2-ngc:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "22.04-tf2-py3"
+  push-torch-ngc:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-torch-ngc"
+          tag: "22.04-py3
+"
+    
 
 workflows: 
   main:  
     jobs:
-      - say-hello
-
+      - push-tf1-ngc:
+          context:
+            - quay-creds
+          filters:
+            branches:
+              only:
+                - main
+      - push-tf2-ngc:
+          context:
+            - quay-creds
+          filters:
+            branches:
+              only:
+                - main
+      - push-torch-ngc:
+          context:
+            - quay-creds
+          filters:
+            branches:
+              only:
+                - main
