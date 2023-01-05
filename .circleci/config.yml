@@ -27,7 +27,7 @@ commands:
 
 
 jobs:
-  push-tf1:
+  push-tf1-ngc:
     docker:
       - image: cimg/base:stable
     steps:
@@ -35,7 +35,7 @@ jobs:
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: "tf1-22.04"
-  push-tf2:
+  push-tf2-ngc:
     docker:
       - image: cimg/base:stable
     steps:
@@ -43,7 +43,7 @@ jobs:
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: "tf2-22.04"
-  push-torch:
+  push-torch-ngc:
     docker:
       - image: cimg/base:stable
     steps:
@@ -56,21 +56,21 @@ jobs:
 workflows: 
   main:  
     jobs:
-      - push-tf1:
+      - push-tf1-ngc:
           context:
             - quay-creds
           filters:
             branches:
               only:
                 - main
-      - push-tf2:
+      - push-tf2-ngc:
           context:
             - quay-creds
           filters:
             branches:
               only:
                 - main
-      - push-torch:
+      - push-torch-ngc:
           context:
             - quay-creds
           filters:
