@@ -26,7 +26,7 @@ commands:
           command: export TAG_DATE=$(date +'%Y%m%d%H%M') | echo $TAG_DATE
       - run:
           name: docker build
-          command: cd ./<<parameters.path>> | docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
+          command: cd ./<<parameters.path>> && docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
       - run:
           name: docker push
           command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE
