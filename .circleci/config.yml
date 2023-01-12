@@ -78,6 +78,7 @@ workflows:
             branches:
               only:
                 - main
+                - vssl-4005
       - push-tf2-ngc:
           context:
             - quay-creds
@@ -85,6 +86,7 @@ workflows:
             branches:
               only:
                 - main
+                - vssl-4005
       - push-torch-ngc:
           context:
             - quay-creds
@@ -92,6 +94,7 @@ workflows:
             branches:
               only:
                 - main
+                - vssl-4005
       - push-py3x-cpu:
           context:
             - quay-creds
@@ -99,3 +102,4 @@ workflows:
             branches:
               only:
                 - main
+                - vssl-4005
