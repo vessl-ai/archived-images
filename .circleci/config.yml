@@ -45,6 +45,7 @@ commands:
       - run:
           name: docker push
           command: docker push $IMAGE_TAG_NAME
+          no_output_timeout: 1h
 
 jobs:
   push-tf1-ngc-prev:
@@ -63,22 +64,56 @@ jobs:
           failure_message: ':alert: $IMAGE_TAG_NAME Publish Fail! \n'
           success_message: ':blob-clap: <https://github.com/${CIRCLE_USERNAME}|*${CIRCLE_USERNAME}*>\n
           Check out Release Notes <https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/index.html*>'
-  push-tf2-ngc:
+  push-tf1-ngc-cur:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - push-docker-image:
           filename: "py3-tf-ngc"
-          tag: "22.04-tf2-py3"
-  push-torch-ngc:
+          tag: "$(date '+%y.%m')-tf1-py3"
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+  push-tf2-ngc-prev:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "$(date -d '-1 months' '+%y.%m')-tf2-py3"
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+  push-tf2-ngc-cur:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "$(date '+%y.%m')-tf2-py3"
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+  push-pytorch-ngc-prev:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - push-docker-image:
           filename: "py3-torch-ngc"
-          tag: "22.04-py3"
+          tag: "$(date -d '-1 months' '+%y.%m')-py3"
+          repo: "ngc-pytorch-kernel"
+      - insert-image-database
+  push-pytorch-ngc-cur:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - push-docker-image:
+          filename: "py3-torch-ngc"
+          tag: "$(date '+%y.%m')-py3"
+          repo: "ngc-pytorch-kernel"
+      - insert-image-database
   push-py3x-cpu:
     docker:
       - image: cimg/base:stable
@@ -102,7 +137,17 @@ workflows:
               only:
                 - main
                 - vssl-4005
-      - push-tf2-ngc:
+      - push-tf1-ngc-cur:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-tf2-ngc-prev:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -111,7 +156,25 @@ workflows:
               only:
                 - main
                 - vssl-4005
-      - push-torch-ngc:
+      - push-tf2-ngc-cur:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-pytorch-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-pytorch-ngc-cur:
           context:
             - quay-creds
             - kernel-image-publish-secrets
