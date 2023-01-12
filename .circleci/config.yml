@@ -23,7 +23,9 @@ commands:
           command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
           name: store timestamp
-          command: export TAG_DATE=$(date +'%Y%m%d%H%M') | echo $TAG_DATE
+          command: |
+            echo 'export TAG_DATE=$(date +'%Y%m%d%H%M')' >> "$BASH_ENV"
+            source "$BASH_ENV"
       - run:
           name: docker build
           command: cd ./<<parameters.path>> && docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE .
