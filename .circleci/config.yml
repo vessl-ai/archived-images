@@ -1,14 +1,18 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@3.4.2
+
 commands:
   insert-image-database:
-    step:
+    steps:
       - run:
           name: request to aron-backend
-          command: curl -v -X POST https://api.dev.vssl.ai/api/v1/kernels_images/publish_new_managed_image \
-          -H "Authorization: $KERNEL_IMAGE_PUBLISH_SECRET_KEY \
-          -H "Content-type: application/json" \
-          -d '{"image_url": $IMAGE_TAG_NAME}'
+          command: |
+            curl -v -f -X POST https://api.dev.vssl.ai/api/v1/kernels_images/publish_new_managed_image \
+              -H "Authorization: $KERNEL_IMAGE_PUBLISH_SECRET_KEY" \
+              -H "Content-type: application/json" \
+              -d "{\"image_url\": \"$IMAGE_TAG_NAME\"}"
   push-docker-image:
     parameters:
       filename:
@@ -32,26 +36,33 @@ commands:
       - run:
           name: store image tag
           command: |
-            echo 'export IMAGE_TAG_NAME=$QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$(date +'%Y%m%d%H%M')' >> "$BASH_ENV"
+            export TAG="$QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$(date +'%Y%m%d%H%M')"
+            echo "export IMAGE_TAG_NAME=$TAG" >> "$BASH_ENV"
             source "$BASH_ENV"
       - run:
           name: docker build
           command: cd ./<<parameters.path>> && docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $IMAGE_TAG_NAME .
       - run:
           name: docker push
-          command: docker push $QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$TAG_DATE
+          command: docker push $IMAGE_TAG_NAME
 
 jobs:
-  push-tf1-ngc:
+  push-tf1-ngc-prev:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - push-docker-image:
           filename: "py3-tf-ngc"
-          # only can use on linux os
-          tag: "$(date -d "-1 months" '+%y.%m')-tf1-py3"
+          tag: "$(date -d '-1 months' '+%y.%m')-tf1-py3"
+          repo: "ngc-tensorflow-kernel"
       - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':alert: $IMAGE_TAG_NAME Publish Fail! \n'
+          success_message: ':blob-clap: <https://github.com/${CIRCLE_USERNAME}|*${CIRCLE_USERNAME}*>\n
+          Check out Release Notes <https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/index.html*>'
   push-tf2-ngc:
     docker:
       - image: cimg/base:stable
@@ -81,10 +92,11 @@ jobs:
 workflows: 
   main:  
     jobs:
-      - push-tf1-ngc:
+      - push-tf1-ngc-prev:
           context:
             - quay-creds
             - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
           filters:
             branches:
               only:
