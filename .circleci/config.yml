@@ -94,55 +94,108 @@ jobs:
           failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
           <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
-  # push-tf2-ngc-prev:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - checkout
-  #     - push-docker-image:
-  #         filename: "py3-tf-ngc"
-  #         tag: "$(date -d '-1 months' '+%y.%m')-tf2-py3"
-  #         repo: "ngc-tensorflow-kernel"
-  #     - insert-image-database
-  # push-tf2-ngc-cur:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - checkout
-  #     - push-docker-image:
-  #         filename: "py3-tf-ngc"
-  #         tag: "$(date '+%y.%m')-tf2-py3"
-  #         repo: "ngc-tensorflow-kernel"
-  #     - insert-image-database
-  # push-pytorch-ngc-prev:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - checkout
-  #     - push-docker-image:
-  #         filename: "py3-torch-ngc"
-  #         tag: "$(date -d '-1 months' '+%y.%m')-py3"
-  #         repo: "ngc-pytorch-kernel"
-  #     - insert-image-database
-  # push-pytorch-ngc-cur:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - checkout
-  #     - push-docker-image:
-  #         filename: "py3-torch-ngc"
-  #         tag: "$(date '+%y.%m')-py3"
-  #         repo: "ngc-pytorch-kernel"
-  #     - insert-image-database
-  # push-py3x-cpu:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - checkout
-  #     - push-docker-image:
-  #         filename: "py310"
-  #         tag: "py310"
-  #         path: "cpu"
+  push-tf2-ngc-prev:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=$(date -d '-1 months' '+%y.%m')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "$NGC_TAG_VERSION-tf2-py3"
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+  push-tf2-ngc-cur:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=$(date '+%y.%m')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "$NGC_TAG_VERSION-tf2-py3"
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+  push-pytorch-ngc-prev:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=$(date -d '-1 months' '+%y.%m')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-torch-ngc"
+          tag: "$NGC_TAG_VERSION-py3"
+          repo: "ngc-pytorch-kernel"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+  push-pytorch-ngc-cur:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=$(date '+%y.%m')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-torch-ngc"
+          tag: "$NGC_TAG_VERSION-py3"
+          repo: "ngc-pytorch-kernel"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+  push-py3x-cpu:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py310"
+          tag: "py310"
+          path: "cpu"
 
 workflows: 
   main:  
@@ -167,48 +220,48 @@ workflows:
               only:
                 - main
                 - vssl-4005
-      # - push-tf2-ngc-prev:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #           - vssl-4005
-      # - push-tf2-ngc-cur:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #           - vssl-4005
-      # - push-pytorch-ngc-prev:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #           - vssl-4005
-      # - push-pytorch-ngc-cur:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #           - vssl-4005
-      # - push-py3x-cpu:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #           - vssl-4005
+      - push-tf2-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-tf2-ngc-cur:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-pytorch-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-pytorch-ngc-cur:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
+      - push-py3x-cpu:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+          filters:
+            branches:
+              only:
+                - main
+                - vssl-4005
