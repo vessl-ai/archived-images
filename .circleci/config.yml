@@ -196,6 +196,7 @@ jobs:
           filename: "py310"
           tag: "py310"
           path: "cpu"
+          repo: "kernels"
       - slack/status:
           include_project_field: false
           include_job_number_field: false
