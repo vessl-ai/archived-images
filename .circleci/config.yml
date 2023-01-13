@@ -196,6 +196,11 @@ jobs:
           filename: "py310"
           tag: "py310"
           path: "cpu"
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
 workflows: 
   main:  
@@ -224,6 +229,7 @@ workflows:
           context:
             - quay-creds
             - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
           filters:
             branches:
               only:
@@ -233,6 +239,7 @@ workflows:
           context:
             - quay-creds
             - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
           filters:
             branches:
               only:
@@ -242,6 +249,7 @@ workflows:
           context:
             - quay-creds
             - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
           filters:
             branches:
               only:
@@ -251,6 +259,7 @@ workflows:
           context:
             - quay-creds
             - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
           filters:
             branches:
               only:
@@ -260,6 +269,7 @@ workflows:
           context:
             - quay-creds
             - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
           filters:
             branches:
               only:
