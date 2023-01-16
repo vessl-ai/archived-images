@@ -1,4 +1,4 @@
-FROM python:3.7.16-slim-buster
+FROM python:3.7-slim-buster
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1 \
