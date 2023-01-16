@@ -7,6 +7,11 @@ USER root
 
 RUN python -m pip install --upgrade pip
 
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs openssh-server && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install CLI
 RUN python -m pip install --no-cache-dir vessl && \
     rm -rf /root/.cache && \
@@ -17,6 +22,6 @@ RUN jupyter serverextension enable jupyterlab --sys-prefix && \
     jupyter lab build --dev-build=False --minimize=False
 
 RUN python -m ipykernel install  \
-    	--prefix=/opt/conda \
-    	--display-name "NGC TensorFlow $NGC_TAG" && \
+    --prefix=/opt/conda \
+    --display-name "NGC TensorFlow $NGC_TAG" && \
     cat /opt/conda/share/jupyter/kernels/python3/kernel.json
