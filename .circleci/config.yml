@@ -202,12 +202,6 @@ jobs:
 
 workflows: 
   main:
-    triggers:
-    - schedule:
-        cron: "0 2 8 * *"
-        filters:
-          branches:
-            only: main 
     jobs:
       - push-tf1-ngc-prev:
           context:
