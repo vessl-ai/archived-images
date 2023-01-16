@@ -5,12 +5,12 @@ ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 
 USER root
 
+RUN python -m pip install --upgrade pip
+
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs openssh-server && \
     rm -rf /var/lib/apt/lists/*
-
-RUN python -m pip install --upgrade pip
 
 # Install CLI
 RUN python -m pip install --no-cache-dir vessl && \
@@ -23,5 +23,5 @@ RUN jupyter serverextension enable jupyterlab --sys-prefix && \
 
 RUN python -m ipykernel install  \
     --prefix=/opt/conda \
-    --display-name "NGC PyTorch 22.04 (conda)" && \
+    --display-name "NGC PyTorch $NGC_TAG" && \
     cat /opt/conda/share/jupyter/kernels/python3/kernel.json

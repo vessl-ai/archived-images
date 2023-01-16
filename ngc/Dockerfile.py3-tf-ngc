@@ -5,12 +5,12 @@ ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 
 USER root
 
+RUN python -m pip install --upgrade pip
+
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs openssh-server && \
     rm -rf /var/lib/apt/lists/*
-
-RUN python -m pip install --upgrade pip
 
 # Install CLI
 RUN python -m pip install --no-cache-dir vessl && \
@@ -22,6 +22,6 @@ RUN jupyter serverextension enable jupyterlab --sys-prefix && \
     jupyter lab build --dev-build=False --minimize=False
 
 RUN python -m ipykernel install  \
-    	--prefix=/opt/conda \
-    	--display-name "NGC TensorFlow 1 22.04 (conda)" && \
+    --prefix=/opt/conda \
+    --display-name "NGC TensorFlow $NGC_TAG" && \
     cat /opt/conda/share/jupyter/kernels/python3/kernel.json
