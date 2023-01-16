@@ -6,7 +6,7 @@ ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 USER root
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs openssh-server && \
     rm -rf /var/lib/apt/lists/*
 
