@@ -71,12 +71,12 @@ jobs:
           tag: $NGC_TAG_VERSION-tf1-py3
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+      #     <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
   push-tf2-ngc-prev:
     executor: kernel-imnge-publising-docker
     steps:
@@ -92,12 +92,12 @@ jobs:
           tag: "$NGC_TAG_VERSION-tf2-py3"
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+      #     <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
   push-pytorch-ngc-prev:
     executor: kernel-imnge-publising-docker
     steps:
@@ -113,12 +113,12 @@ jobs:
           tag: "$NGC_TAG_VERSION-py3"
           repo: "ngc-pytorch-kernel"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+      #     <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
   push-py37-cpu:
     executor: kernel-imnge-publising-docker
     steps:
@@ -134,11 +134,11 @@ jobs:
           path: "cpu"
           repo: "kernels"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
   push-py38-cpu:
     executor: kernel-imnge-publising-docker
     steps:
@@ -154,11 +154,11 @@ jobs:
           path: "cpu"
           repo: "kernels"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
   push-py39-cpu:
     executor: kernel-imnge-publising-docker
     steps:
@@ -174,11 +174,11 @@ jobs:
           path: "cpu"
           repo: "kernels"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
   push-py310-cpu:
     executor: kernel-imnge-publising-docker
     steps:
@@ -194,11 +194,11 @@ jobs:
           path: "cpu"
           repo: "kernels"
       - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'  
+      # - slack/status:
+      #     include_project_field: false
+      #     include_job_number_field: false
+      #     failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+      #     success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'  
 
 workflows: 
   main:  
