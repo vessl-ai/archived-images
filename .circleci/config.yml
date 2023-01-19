@@ -53,7 +53,7 @@ executors:
       - image: cimg/base:stable
 
 jobs:
-  push-tf1-ngc-1704:
+  push-tf1-ngc-2107:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -61,14 +61,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=17.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.07" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: $NGC_TAG_VERSION-tf1-py3
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-tf2-ngc-1704:
+  push-tf2-ngc-2107:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -76,14 +76,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=17.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.07" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: "$NGC_TAG_VERSION-tf2-py3"
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-pytorch-ngc-1704:
+  push-pytorch-ngc-2107:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -91,14 +91,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=17.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.07" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-torch-ngc"
           tag: "$NGC_TAG_VERSION-py3"
           repo: "ngc-pytorch-kernel"
       - insert-image-database
-  push-tf1-ngc-1804:
+  push-tf1-ngc-2105:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -106,14 +106,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=18.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.05" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: $NGC_TAG_VERSION-tf1-py3
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-tf2-ngc-1804:
+  push-tf2-ngc-2105:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -121,14 +121,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=18.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.05" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: "$NGC_TAG_VERSION-tf2-py3"
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-pytorch-ngc-1804:
+  push-pytorch-ngc-2105:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -136,14 +136,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=18.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.05" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-torch-ngc"
           tag: "$NGC_TAG_VERSION-py3"
           repo: "ngc-pytorch-kernel"
       - insert-image-database
-  push-tf1-ngc-1904:
+  push-tf1-ngc-2106:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -151,14 +151,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=19.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.06" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: $NGC_TAG_VERSION-tf1-py3
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-tf2-ngc-1904:
+  push-tf2-ngc-2106:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -166,74 +166,14 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=19.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.06" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: "$NGC_TAG_VERSION-tf2-py3"
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-pytorch-ngc-1904:
-    executor: kernel-imnge-publising-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=19.04" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - push-docker-image:
-          filename: "py3-torch-ngc"
-          tag: "$NGC_TAG_VERSION-py3"
-          repo: "ngc-pytorch-kernel"
-      - insert-image-database
-  push-tf1-ngc-2004:
-    executor: kernel-imnge-publising-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=20.04" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - push-docker-image:
-          filename: "py3-tf-ngc"
-          tag: $NGC_TAG_VERSION-tf1-py3
-          repo: "ngc-tensorflow-kernel"
-      - insert-image-database
-  push-tf2-ngc-2004:
-    executor: kernel-imnge-publising-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=20.04" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - push-docker-image:
-          filename: "py3-tf-ngc"
-          tag: "$NGC_TAG_VERSION-tf2-py3"
-          repo: "ngc-tensorflow-kernel"
-      - insert-image-database
-  push-pytorch-ngc-2004:
-    executor: kernel-imnge-publising-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=20.04" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - push-docker-image:
-          filename: "py3-torch-ngc"
-          tag: "$NGC_TAG_VERSION-py3"
-          repo: "ngc-pytorch-kernel"
-      - insert-image-database
-  push-tf1-ngc-2104:
+  push-pytorch-ngc-2106:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -244,11 +184,11 @@ jobs:
             echo "export NGC_TAG_VERSION=21.04" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
-          filename: "py3-tf-ngc"
-          tag: $NGC_TAG_VERSION-tf1-py3
-          repo: "ngc-tensorflow-kernel"
+          filename: "py3-torch-ngc"
+          tag: "$NGC_TAG_VERSION-py3"
+          repo: "ngc-pytorch-kernel"
       - insert-image-database
-  push-tf2-ngc-2104:
+  push-tf1-ngc-2108:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -256,14 +196,29 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=21.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.08" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: $NGC_TAG_VERSION-tf1-py3
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+  push-tf2-ngc-2108:
+    executor: kernel-imnge-publising-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.08" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
           tag: "$NGC_TAG_VERSION-tf2-py3"
           repo: "ngc-tensorflow-kernel"
       - insert-image-database
-  push-pytorch-ngc-2104:
+  push-pytorch-ngc-2108:
     executor: kernel-imnge-publising-docker
     steps:
       - checkout
@@ -271,7 +226,7 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=21.04" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=21.08" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-torch-ngc"
@@ -282,7 +237,7 @@ jobs:
 workflows: 
   main:
     jobs:
-      - push-tf1-ngc-1704:
+      - push-tf1-ngc-2105:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -291,7 +246,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf2-ngc-1704:
+      - push-tf2-ngc-2105:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -300,7 +255,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-pytorch-ngc-1704:
+      - push-pytorch-ngc-2105:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -309,7 +264,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf1-ngc-1804:
+      - push-tf1-ngc-2106:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -318,7 +273,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf2-ngc-1804:
+      - push-tf2-ngc-2106:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -327,7 +282,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-pytorch-ngc-1804:
+      - push-pytorch-ngc-2106:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -336,7 +291,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf1-ngc-1904:
+      - push-tf1-ngc-2107:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -345,7 +300,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf2-ngc-1904:
+      - push-tf2-ngc-2107:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -354,7 +309,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-pytorch-ngc-1904:
+      - push-pytorch-ngc-2107:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -363,7 +318,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf1-ngc-2004:
+      - push-tf1-ngc-2108:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -372,7 +327,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-tf2-ngc-2004:
+      - push-tf2-ngc-2108:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -381,34 +336,7 @@ workflows:
             branches:
               only:
                 - force-image-publish
-      - push-pytorch-ngc-2004:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - force-image-publish
-      - push-tf1-ngc-2104:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - force-image-publish
-      - push-tf2-ngc-2104:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - force-image-publish
-      - push-pytorch-ngc-2104:
+      - push-pytorch-ngc-2108:
           context:
             - quay-creds
             - kernel-image-publish-secrets
