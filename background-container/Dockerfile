@@ -14,8 +14,9 @@ RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
 # install external libraries
-RUN pip install awscli==1.20.39
-RUN pip install 'dvc[gs,s3]'==2.7.2
+RUN pip install --upgrade pip
+RUN pip install awscli==1.27.68
+RUN pip install 'dvc[gs,s3]'==2.43.4
 
 # install cli
 RUN pip install vessl==0.1.82
