@@ -15,11 +15,11 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 
 # install external libraries
 RUN pip install --upgrade pip
-RUN pip install awscli==1.27.68
-RUN pip install 'dvc[gs,s3]'==2.43.4
+RUN pip install awscli==1.27.144
+RUN pip install 'dvc[gs,s3]'==2.58.2
 
 # install cli
-RUN pip install vessl==0.1.90
+RUN pip install vessl==0.1.99
 
 # install rsync
 RUN apt-get install rsync -y
