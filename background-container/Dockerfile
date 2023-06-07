@@ -22,6 +22,6 @@ RUN pip install awscli==1.20.39
 RUN pip install 'dvc[gs,s3]'==2.51.0
 
 # install cli
-RUN pip install vessl==0.1.87
+RUN pip install vessl==0.1.100
 
 ENTRYPOINT ["/bin/sh"]
