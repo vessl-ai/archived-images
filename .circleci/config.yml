@@ -61,7 +61,7 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=22.11" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=22.10" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
@@ -76,7 +76,7 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=22.11" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=22.10" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-tf-ngc"
@@ -91,7 +91,7 @@ jobs:
           name: store variables
           command: |
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=22.11" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=22.10" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
           filename: "py3-torch-ngc"
