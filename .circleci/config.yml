@@ -50,14 +50,14 @@ commands:
           no_output_timeout: 1h
 
 executors:
-  kernel-imnge-publising-docker:
+  kernel-image-publishing-docker:
     resource_class: xlarge
     docker:
       - image: cimg/base:stable
 
 jobs:
   push-tf2-ngc-prev:
-    executor: kernel-imnge-publising-docker
+    executor: kernel-image-publishing-docker
     steps:
       - checkout
       - run:
@@ -78,7 +78,7 @@ jobs:
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
           <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
   push-pytorch-ngc-prev:
-    executor: kernel-imnge-publising-docker
+    executor: kernel-image-publishing-docker
     steps:
       - checkout
       - run:
@@ -99,7 +99,7 @@ jobs:
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
           <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
   push-py37-cpu:
-    executor: kernel-imnge-publising-docker
+    executor: kernel-image-publishing-docker
     steps:
       - checkout
       - run:
@@ -119,7 +119,7 @@ jobs:
           failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
   push-py38-cpu:
-    executor: kernel-imnge-publising-docker
+    executor: kernel-image-publishing-docker
     steps:
       - checkout
       - run:
@@ -139,7 +139,7 @@ jobs:
           failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
   push-py39-cpu:
-    executor: kernel-imnge-publising-docker
+    executor: kernel-image-publishing-docker
     steps:
       - checkout
       - run:
@@ -159,7 +159,7 @@ jobs:
           failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
   push-py310-cpu:
-    executor: kernel-imnge-publising-docker
+    executor: kernel-image-publishing-docker
     steps:
       - checkout
       - run:
@@ -178,6 +178,26 @@ jobs:
           include_job_number_field: false
           failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
           success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'  
+  push-py311-cpu:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py311"
+          tag: "py311"
+          path: "cpu"
+          repo: "kernels"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
 workflows: 
   main:
@@ -200,7 +220,7 @@ workflows:
             branches:
               only:
                 - main
-      - push-py310-cpu:
+      - push-py311-cpu:
           context:
             - quay-creds
             - kernel-image-publish-secrets
