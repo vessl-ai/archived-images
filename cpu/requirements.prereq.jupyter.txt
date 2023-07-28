@@ -1,2 +1,2 @@
 tornado
-notebook
+notebook==6.5.5
