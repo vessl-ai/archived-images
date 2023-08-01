@@ -1,4 +1,4 @@
-FROM python:3.8.3-slim
+FROM python:3.11.4-slim
 
 # install basics
 RUN apt-get update && apt-get install curl gcc git zip unzip -y
@@ -15,8 +15,7 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 
 # install external libraries
 RUN pip install --upgrade pip
-RUN pip install awscli==1.27.144
-RUN pip install 'dvc[gs,s3]'==2.58.2
+RUN pip install awscli==1.29.16
 
 # install cli
 RUN pip install vessl==0.1.128
