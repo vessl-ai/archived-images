@@ -18,7 +18,7 @@ RUN pip install --upgrade pip
 RUN pip install awscli==1.29.16
 
 # install cli
-RUN pip install vessl==0.1.130
+RUN pip install vessl==0.1.133
 
 # install rsync
 RUN apt-get install rsync -y
