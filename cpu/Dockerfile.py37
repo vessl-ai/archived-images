@@ -47,12 +47,13 @@ RUN pip install --no-cache-dir vessl
 
 RUN pip install --no-cache-dir \
     mxnet==$MXNET_VERSION \
-    tensorflow==$TF_VERSION \
+    tensorflow-cpu==$TF_VERSION \
     tensorboard \
-    torch==${TORCH_VERSION} \
-    torchvision==${TORCHVISION_VERSION} \
+    torch==${TORCH_VERSION}+cpu \
+    torchvision==${TORCHVISION_VERSION}+cpu \
     keras keras_applications keras_preprocessing \
-    tensorflow-hub==$TF_HUB tf2onnx && \
+    tensorflow-hub==$TF_HUB tf2onnx \
+    --extra-index-url https://download.pytorch.org/whl/cpu && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl
 
