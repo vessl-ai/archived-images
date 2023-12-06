@@ -86,5 +86,10 @@ RUN jupyter labextension install --no-build @jupyterlab/git && \
 RUN python -m ipykernel install --display-name "Full on Python 3.9 (CPU-only)" && \
     cat /usr/local/share/jupyter/kernels/python3/kernel.json
 
+# Install git-lfs
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
+    && apt-get install git-lfs \
+    && git lfs install
+
 COPY start-notebook.sh /usr/local/bin/
 CMD ["start-notebook.sh"]

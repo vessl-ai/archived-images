@@ -25,3 +25,8 @@ RUN python -m ipykernel install  \
     --prefix=/opt/conda \
     --display-name "NGC PyTorch $NGC_TAG" && \
     cat /opt/conda/share/jupyter/kernels/python3/kernel.json
+
+# Install git-lfs
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
+    && apt-get install git-lfs \
+    && git lfs install
