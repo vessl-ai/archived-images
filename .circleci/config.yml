@@ -192,7 +192,7 @@ jobs:
           tag: "torch2.1.0-cuda12.2"
           path: "hub"
           repo: "hub"
-      - insert-image-database
+      # - insert-image-database
       - slack/status:
           include_project_field: false
           include_job_number_field: false
