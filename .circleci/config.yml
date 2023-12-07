@@ -188,7 +188,7 @@ jobs:
             echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
             source "$BASH_ENV"
       - push-docker-image:
-          filename: "hub"
+          filename: "torch2.1.0-cuda12.2"
           tag: "torch2.1.0-cuda12.2"
           path: "hub"
           repo: "hub"
