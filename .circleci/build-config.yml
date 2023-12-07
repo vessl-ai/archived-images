@@ -1,0 +1,288 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+
+parameters:
+  build-cpu:
+    type: boolean
+    default: false
+  build-ngc:
+    type: boolean
+    default: false
+  build-hub:
+    type: boolean
+    default: false
+  build-background-container:
+    type: boolean
+    default: false
+
+commands:
+  insert-image-database:
+    steps:
+      - run:
+          name: request to aron-backend
+          command: |
+            curl -v -f -X POST https://api.vessl.ai/api/v1/kernels_images/publish_new_managed_image \
+              -H "Authorization: $PROD_KERNEL_IMAGE_PUBLISH_SECRET_KEY" \
+              -H "Content-type: application/json" \
+              -d "{\"image_url\": \"$IMAGE_TAG_NAME\"}"
+  push-docker-image:
+    parameters:
+      filename:
+        type: string
+      repo:
+        type: string
+        default: test
+      tag:
+        default: latest
+        type: string
+      path:
+        default: ngc
+        type: string
+    steps:
+      - setup_remote_docker:
+            version: 20.10.17
+            docker_layer_caching: true
+      - run:
+          name: docker login
+          command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
+      - run:
+          name: store image tag
+          command: |
+            export TAG="$QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>-$DATE"
+            echo "export IMAGE_TAG_NAME=$TAG" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - run:
+          name: docker build
+          command: |
+            cd ./<<parameters.path>> &&  docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $IMAGE_TAG_NAME .
+      - run:
+          name: docker push
+          command: |
+            docker push $IMAGE_TAG_NAME
+          no_output_timeout: 1h
+
+executors:
+  kernel-image-publishing-docker:
+    resource_class: xlarge
+    docker:
+      - image: cimg/base:stable
+
+jobs:
+  push-tf2-ngc-prev:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=$(date -d '-1 months' '+%y.%m')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-tf-ngc"
+          tag: "$NGC_TAG_VERSION-tf2-py3"
+          repo: "ngc-tensorflow-kernel"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+  push-pytorch-ngc-prev:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            echo "export NGC_TAG_VERSION=$(date -d '-1 months' '+%y.%m')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py3-torch-ngc"
+          tag: "$NGC_TAG_VERSION-py3"
+          repo: "ngc-pytorch-kernel"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $IMAGE_TAG_NAME | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+  push-py38-cpu:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py38"
+          tag: "py38"
+          path: "cpu"
+          repo: "kernels"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+  push-py39-cpu:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py39"
+          tag: "py39"
+          path: "cpu"
+          repo: "kernels"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+  push-py310-cpu:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py310"
+          tag: "py310"
+          path: "cpu"
+          repo: "kernels"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'  
+  push-py311-cpu:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "py311"
+          tag: "py311"
+          path: "cpu"
+          repo: "kernels"
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+  push-hub:
+    executor: kernel-image-publishing-docker
+    steps:
+      - checkout
+      - run:
+          name: store variables
+          command: |
+            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - push-docker-image:
+          filename: "torch2.1.0-cuda12.2"
+          tag: "torch2.1.0-cuda12.2"
+          path: "hub"
+          repo: "hub"
+      # - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$IMAGE_TAG_NAME|\``echo ${IMAGE_TAG_NAME} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+
+workflows: 
+  build-cpu:
+    when: << pipeline.parameters.build-cpu >>
+    jobs:
+      - push-py311-cpu:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+      - push-py310-cpu:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+      - push-py39-cpu:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+      - push-py38-cpu:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+  build-ngc:
+    when: << pipeline.parameters.build-ngc >>
+    jobs:
+      - push-tf2-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+      - push-pytorch-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+  build-hub:
+    when: << pipeline.parameters.build-hub >>
+    jobs:
+      - push-hub:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
