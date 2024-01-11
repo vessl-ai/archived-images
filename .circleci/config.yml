@@ -145,9 +145,9 @@ commands:
       - setup_remote_docker:
             version: 20.10.17
             docker_layer_caching: true
-#      - run:
-#          name: docker login
-#          command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
+      - run:
+          name: docker login
+          command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
           name: store image tag
           command: |
