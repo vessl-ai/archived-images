@@ -157,7 +157,7 @@ commands:
       - run:
           name: docker build
           command: |
-            cd ./<<parameters.path>> &&  sudo docker build --platform=linux/amd64 --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $IMAGE_TAG_NAME .
+            cd ./<<parameters.path>> &&  docker build --platform=linux/amd64 --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $IMAGE_TAG_NAME .
 
 executors:
   kernel-image-publishing-docker:
