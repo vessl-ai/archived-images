@@ -12,43 +12,39 @@ commands:
             curl -v -f -X POST https://api.vessl.ai/api/v1/kernels_images/publish_new_managed_image \
               -H "Authorization: $PROD_KERNEL_IMAGE_PUBLISH_SECRET_KEY" \
               -H "Content-type: application/json" \
-              -d "{\"image_url\": \"$NEW_TAG\"}"
+              -d "{\"image_url\": \"$VERSION_REV_TAG\"}"
   fetch-py-ver:
     steps:
       - run:
           name: fetch python version
           command: |
-            PY_VER=$(sudo docker run --rm $IMAGE_TAG_NAME /bin/bash -c 'python3 -V' | grep -o 'Python [0-9.]*' | awk '{print $2}')
+            PY_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c "python -c 'import sys; print(\".\".join(map(str, sys.version_info[:3])))'")
             echo "export PY_VER=$PY_VER" >> "$BASH_ENV"
             source "$BASH_ENV"
-            echo $PY_VER
   fetch-tf-ver:
     steps:
       - run:
           name: fetch tensorflow version
           command: |
-            TF_VER=$(sudo docker run --rm $IMAGE_TAG_NAME /bin/bash -c 'pip show tensorflow' | grep -o 'Version: [0-9.]*' | awk '{print $2}')
+            TF_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c 'pip show tensorflow' | grep -o '^Version: [0-9.]*' | awk '{print $2}')
             echo "export TF_VER=$TF_VER" >> "$BASH_ENV"
             source "$BASH_ENV"
-            echo $TF_VER
   fetch-cuda-ver:
     steps:
       - run:
           name: fetch cuda version
           command: |
-            CUDA_VER=$(sudo docker run --rm $IMAGE_TAG_NAME /bin/bash -c 'nvcc -V' | grep -o 'release [0-9.]*' | awk '{print $2}')
+            CUDA_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c 'nvcc -V' | grep -o 'release [0-9.]*' | awk '{print $2}')
             echo "export CUDA_VER=$CUDA_VER" >> "$BASH_ENV"
             source "$BASH_ENV"
-            echo $CUDA_VER
   fetch-torch-ver:
     steps:
       - run:
           name: fetch pytorch version
           command: |
-            TORCH_VER=$(sudo docker run --rm $IMAGE_TAG_NAME /bin/bash | grep -o 'Version [0-9.]*' | awk '{print $2}')
+            TORCH_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c "python -c 'import torch; print(torch.__version__)'" | grep -o '^[0-9.]*')
             echo "export TORCH_VER=$TORCH_VER" >> "$BASH_ENV"
             source "$BASH_ENV"
-            echo $TORCH_VER
   overwrite-tag-tf:
     steps:
       - fetch-tf-ver
@@ -61,17 +57,6 @@ commands:
             source "$BASH_ENV"
       - fetch-revision-ver:
           repo: "tensorflow"
-  overwrite-tag-torch-cpu:
-    steps:
-      - fetch-torch-ver
-      - run:
-          name: overwrite torch-cpu version info
-          command: |
-            VERSION_TAG=$TORCH_VER-cpu
-            echo "export VERSION_TAG=$VERSION_TAG" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - fetch-revision-ver:
-          repo: "torch"
   overwrite-tag-torch-gpu:
     steps:
       - fetch-torch-ver
@@ -111,22 +96,21 @@ commands:
               fi
               suffix=$((suffix + 1))
             done
-            echo $suffix
-            NEW_TAG=$QUAY_ACCOUNT_URL/<<parameters.repo>>:$VERSION_TAG-r$suffix
-            echo "export NEW_TAG=$NEW_TAG" >> "$BASH_ENV"
+            VERSION_REV_TAG=$QUAY_ACCOUNT_URL/<<parameters.repo>>:$VERSION_TAG-r$suffix
+            echo "export VERSION_REV_TAG=$VERSION_REV_TAG" >> "$BASH_ENV"
             source "$BASH_ENV"
   push-docker-image:
     steps:
       - run:
           name: docker push
           command: |
-            echo "PUSHED $IMAGE_TAG_NAME AS $NEW_TAG"
-            WITHOUT_REV_VER=$(echo "$NEW_TAG" | sed 's/-r[0-9]*$//')
-            docker tag $IMAGE_TAG_NAME $NEW_TAG
-            docker tag $IMAGE_TAG_NAME $WITHOUT_REV_VER
-            docker push $NEW_TAG
-            docker push $WITHOUT_REV_VER
-            no_output_timeout: 1h
+            echo "PUSHED $TEMP_TAG AS $VERSION_REV_TAG"
+            LATEST_TAG=$(echo "$VERSION_REV_TAG" | sed 's/-r[0-9]*$//')
+            docker tag $TEMP_TAG $VERSION_REV_TAG
+            docker tag $TEMP_TAG $LATEST_TAG
+            docker push $VERSION_REV_TAG
+            docker push $LATEST_TAG
+          no_output_timeout: 1h
 
   build-docker-image:
     parameters:
@@ -152,12 +136,12 @@ commands:
           name: store image tag
           command: |
             export TAG="$QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>"
-            echo "export IMAGE_TAG_NAME=$TAG" >> "$BASH_ENV"
+            echo "export TEMP_TAG=$TAG" >> "$BASH_ENV"
             source "$BASH_ENV"
       - run:
           name: docker build
           command: |
-            cd ./<<parameters.path>> &&  docker build --platform=linux/amd64 --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $IMAGE_TAG_NAME .
+            cd ./<<parameters.path>> &&  docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $TEMP_TAG .
 
 executors:
   kernel-image-publishing-docker:
@@ -186,9 +170,9 @@ jobs:
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $NEW_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
 
   push-pytorch-ngc-prev:
     executor: kernel-image-publishing-docker
@@ -204,15 +188,15 @@ jobs:
           filename: "py3-torch-ngc"
           tag: "$NGC_TAG_VERSION-py3"
           repo: "torch"
-      - overwrite-tag-torch-cpu
+      - overwrite-tag-torch-gpu
       - push-docker-image
       - insert-image-database
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $NEW_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
 
   push-py38-cpu:
     executor: kernel-image-publishing-docker
@@ -234,8 +218,8 @@ jobs:
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-py39-cpu:
     executor: kernel-image-publishing-docker
@@ -257,8 +241,8 @@ jobs:
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-py310-cpu:
     executor: kernel-image-publishing-docker
@@ -280,8 +264,8 @@ jobs:
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-py311-cpu:
     executor: kernel-image-publishing-docker
@@ -303,8 +287,8 @@ jobs:
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-hub:
     executor: kernel-image-publishing-docker
@@ -326,8 +310,8 @@ jobs:
       - slack/status:
           include_project_field: false
           include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${NEW_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$NEW_TAG|\``echo ${NEW_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
 workflows: 
   main:
