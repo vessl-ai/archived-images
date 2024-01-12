@@ -106,10 +106,10 @@ commands:
           command: |
             echo "PUSHED $TEMP_TAG AS $VERSION_REV_TAG"
             LATEST_TAG=$(echo "$VERSION_REV_TAG" | sed 's/-r[0-9]*$//')
-            docker tag $TEMP_TAG $VERSION_REV_TAG
-            docker tag $TEMP_TAG $LATEST_TAG
-            docker push $VERSION_REV_TAG
-            docker push $LATEST_TAG
+            sudo docker tag $TEMP_TAG $VERSION_REV_TAG
+            sudo docker tag $TEMP_TAG $LATEST_TAG
+            sudo docker push $VERSION_REV_TAG
+            sudo docker push $LATEST_TAG
           no_output_timeout: 1h
 
   build-docker-image:
