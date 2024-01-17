@@ -9,8 +9,8 @@ commands:
       - run:
           name: request to aron-backend
           command: |
-            curl -v -f -X POST https://api.vessl.ai/api/v1/kernels_images/publish_new_managed_image \
-              -H "Authorization: $PROD_KERNEL_IMAGE_PUBLISH_SECRET_KEY" \
+            curl -v -f -X POST https://api.dev.vssl.ai/api/v1/kernels_images/publish_new_managed_image \
+              -H "Authorization: $KERNEL_IMAGE_PUBLISH_SECRET_KEY" \
               -H "Content-type: application/json" \
               -d "{\"image_url\": \"$VERSION_REV_TAG\"}"
   fetch-py-ver:
