@@ -18,7 +18,7 @@ commands:
       - run:
           name: fetch python version
           command: |
-            PY_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c "python -c 'import sys; print(\".\".join(map(str, sys.version_info[:3])))'")
+            PY_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c "python -c 'import sys; print(\".\".join(map(str, sys.version_info[:2])))'")
             echo "export PY_VER=$PY_VER" >> "$BASH_ENV"
             source "$BASH_ENV"
   fetch-tf-ver:
