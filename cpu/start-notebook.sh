@@ -4,8 +4,9 @@
 
 set -e
 
-if [[ -n "${JUPYTER_ENABLE_LAB}" ]]; then
-  jupyter lab --NotebookApp.ip=0.0.0.0 --NotebookApp.token=${VESSL_TOKEN} --NotebookApp.base_url=${VESSL_BASE_URL} --NotebookApp.allow_origin=* --no-browser "$@" --allow-root
-else
-  jupyter notebook --NotebookApp.ip=0.0.0.0 --NotebookApp.token=${VESSL_TOKEN} --NotebookApp.base_url=${VESSL_BASE_URL} --NotebookApp.allow_origin=* --no-browser "$@" --allow-root
-fi
+jupyter lab \
+  --ServerApp.ip=0.0.0.0 \
+  --ServerApp.token=${VESSL_TOKEN} \
+  --ServerApp.base_url=${VESSL_BASE_URL} \
+  --ServerApp.allow_origin="*" \
+  --no-browser "$@" --allow-root
