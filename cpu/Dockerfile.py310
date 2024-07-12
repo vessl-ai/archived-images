@@ -28,7 +28,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --no-compile -U pip
+RUN pip install --no-cache-dir --no-compile -U pip && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
 
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
@@ -38,7 +40,9 @@ RUN pip install --no-cache-dir --no-compile -r requirements.txt && \
     rm -f requirements.txt
 
 # Install CLI
-RUN pip install --no-cache-dir --no-compile vessl
+RUN pip install --no-cache-dir --no-compile vessl && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
 
 RUN pip install --no-cache-dir --no-compile \
     mxnet==$MXNET_VERSION \
@@ -55,13 +59,15 @@ RUN pip install --no-cache-dir --no-compile \
 RUN pip install --no-cache-dir --no-compile \
     jupyterlab jupyterlab-git ipywidgets && \
     rm -rf /root/.cache && \
-    rm -f /tmp/*.whl && \
-    rm -f requirements.txt
+    rm -f /tmp/*.whl
 
 # Install git-lfs
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
-    && apt-get install git-lfs \
-    && git lfs install
+RUN apt-get update && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get install git-lfs && \
+    git lfs install && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY start-notebook.sh /usr/local/bin/
 CMD ["start-notebook.sh"]
