@@ -127,7 +127,7 @@ commands:
         type: string
     steps:
       - setup_remote_docker:
-            version: 20.10.17
+            version: default
             docker_layer_caching: true
       - run:
           name: docker login
