@@ -213,13 +213,13 @@ jobs:
           path: "cpu"
           repo: "python"
       - overwrite-tag-python-cpu
-      # - push-docker-image
-      # - insert-image-database
-      # - slack/status:
-      #     include_project_field: false
-      #     include_job_number_field: false
-      #     failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-      #     success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      - push-docker-image
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-py39-cpu:
     executor: kernel-image-publishing-docker
@@ -236,13 +236,13 @@ jobs:
           path: "cpu"
           repo: "python"
       - overwrite-tag-python-cpu
-      # - push-docker-image
-      # - insert-image-database
-      # - slack/status:
-      #     include_project_field: false
-      #     include_job_number_field: false
-      #     failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-      #     success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      - push-docker-image
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-py310-cpu:
     executor: kernel-image-publishing-docker
@@ -259,13 +259,13 @@ jobs:
           path: "cpu"
           repo: "python"
       - overwrite-tag-python-cpu
-      # - push-docker-image
-      # - insert-image-database
-      # - slack/status:
-      #     include_project_field: false
-      #     include_job_number_field: false
-      #     failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-      #     success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      - push-docker-image
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
   push-py311-cpu:
     executor: kernel-image-publishing-docker
@@ -282,35 +282,35 @@ jobs:
           path: "cpu"
           repo: "python"
       - overwrite-tag-python-cpu
-      # - push-docker-image
-      # - insert-image-database
-      # - slack/status:
-      #     include_project_field: false
-      #     include_job_number_field: false
-      #     failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-      #     success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
+      - push-docker-image
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
 workflows: 
   main:
     jobs:
-      # - push-tf2-ngc-prev:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #       - slack-webhook-for-v3-orb
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      # - push-pytorch-ngc-prev:
-      #     context:
-      #       - quay-creds
-      #       - kernel-image-publish-secrets
-      #       - slack-webhook-for-v3-orb
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
+      - push-tf2-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
+      - push-pytorch-ngc-prev:
+          context:
+            - quay-creds
+            - kernel-image-publish-secrets
+            - slack-webhook-for-v3-orb
+          filters:
+            branches:
+              only:
+                - main
       - push-py311-cpu:
           context:
             - quay-creds
@@ -320,7 +320,6 @@ workflows:
             branches:
               only:
                 - main
-                - amelia/trim-cpu
       - push-py310-cpu:
           context:
             - quay-creds
@@ -330,7 +329,6 @@ workflows:
             branches:
               only:
                 - main
-                - amelia/trim-cpu
       - push-py39-cpu:
           context:
             - quay-creds
@@ -340,7 +338,6 @@ workflows:
             branches:
               only:
                 - main
-                - amelia/trim-cpu
       - push-py38-cpu:
           context:
             - quay-creds
@@ -350,4 +347,3 @@ workflows:
             branches:
               only:
                 - main
-                - amelia/trim-cpu
