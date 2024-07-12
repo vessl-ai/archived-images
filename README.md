@@ -9,7 +9,7 @@ VESSL images for experiment and workspace
 All **VESSL Images** have the most used data science python package installed. The full list of **DS** packages are as follows.
 
 ```bash
-numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, plotly, tqdm
+numpy, scipy, pandas, matplotlib, scikit-learn, opencv-python, seaborn, tqdm
 ```
 
 ### Image tag

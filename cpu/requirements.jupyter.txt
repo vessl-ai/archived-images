@@ -1,4 +1,0 @@
-jupyter
-jupyterlab==3.3.4
-jupyterlab-git==0.36.0
-jupyter-tensorboard==0.2.0

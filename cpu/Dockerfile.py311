@@ -11,8 +11,6 @@ ENV TF_HUB 0.13.0
 ENV TORCH_VERSION 2.0.1
 ENV TORCHVISION_VERSION 0.15.2
 
-ENV JUPYTER_ENABLE_LAB=TRUE
-
 USER root
 
 RUN apt-get update && \
@@ -23,7 +21,6 @@ RUN apt-get update && \
         libgeos-dev libgeos++-dev libglib2.0-0 libgl1-mesa-glx libmpdec2 libproj-dev libsndfile1 libssl-dev \
         mime-support \
         openssh-server \
-        proj-bin \
         sudo \
         vim jq tmux \
         unzip zip \
@@ -31,65 +28,46 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN pip install --no-cache-dir --no-compile -U pip && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
+
 # Install pypi data science related dependencies
 COPY requirements.datascience.txt requirements.txt
-RUN pip install -U pip && \
-    pip install --no-cache-dir -r requirements.txt && \
+RUN pip install --no-cache-dir --no-compile -r requirements.txt && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl && \
     rm -f requirements.txt
 
-
-RUN pip install --upgrade pip
-
 # Install CLI
-RUN pip install --no-cache-dir vessl
+RUN pip install --no-cache-dir --no-compile vessl && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
 
-RUN pip install --no-cache-dir \
+RUN pip install --no-cache-dir --no-compile \
     mxnet==$MXNET_VERSION \
     tensorflow-cpu==$TF_VERSION \
     tensorboard \
     torch==${TORCH_VERSION}+cpu \
     torchvision==${TORCHVISION_VERSION}+cpu \
-    keras keras_applications keras_preprocessing \
+    keras \
     tensorflow-hub==$TF_HUB tf2onnx \
     --extra-index-url https://download.pytorch.org/whl/cpu && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl
 
-# Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install Jupyter prerequisite packages
-COPY requirements.prereq.jupyter.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt && \
+RUN pip install --no-cache-dir --no-compile \
+    jupyterlab jupyterlab-git ipywidgets && \
     rm -rf /root/.cache && \
-    rm -f /tmp/*.whl && \
-    rm -f requirements.txt
-
-# Install Jupyter requirements
-COPY requirements.jupyter.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /root/.cache && \
-    rm -f /tmp/*.whl && \
-    rm -f requirements.txt
-
-# Jupyterlab extension install
-RUN jupyter serverextension enable --py jupyterlab --sys-prefix
-
-RUN jupyter labextension install --no-build @jupyterlab/git && \
-    jupyter lab build --dev-build=False --minimize=False
-
-# Install ipython kernelspec
-RUN python -m ipykernel install --display-name "Full on Python 3.11 (CPU-only)" && \
-    cat /usr/local/share/jupyter/kernels/python3/kernel.json
+    rm -f /tmp/*.whl
 
 # Install git-lfs
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
-    && apt-get install git-lfs \
-    && git lfs install
+RUN apt-get update && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get install git-lfs && \
+    git lfs install && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY start-notebook.sh /usr/local/bin/
 CMD ["start-notebook.sh"]
