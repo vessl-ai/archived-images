@@ -1,36 +1,30 @@
 ARG NGC_TAG
 FROM nvcr.io/nvidia/tensorflow:$NGC_TAG
 
+ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH=/home/vessl/.local/bin:/opt/conda/bin:$PATH
 
 USER root
 
-RUN python -m pip install --upgrade pip
-
-# Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs openssh-server && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install CLI
-RUN python -m pip install --no-cache-dir vessl && \
+RUN pip install --no-cache-dir --no-compile -U pip && \
     rm -rf /root/.cache && \
     rm -f /tmp/*.whl
 
-# Jupyterlab extension install
-RUN jupyter serverextension enable jupyterlab --sys-prefix && \
-    jupyter lab build --dev-build=False --minimize=False
-
-RUN python -m ipykernel install  \
-    --prefix=/opt/conda \
-    --display-name "NGC TensorFlow $NGC_TAG" && \
-    cat /opt/conda/share/jupyter/kernels/python3/kernel.json
+RUN pip install --no-cache-dir --no-compile \
+    jupyterlab jupyterlab-git ipywidgets && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
 
 # Install git-lfs
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
-    && apt-get install git-lfs \
-    && git lfs install
+RUN apt-get update && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get install -yq git-lfs && \
+    git lfs install && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install bentoml poetry
-RUN pip install bentoml
-RUN pip install poetry
+RUN pip install --no-cache-dir --no-compile \
+    bentoml poetry && \
+    rm -rf /root/.cache && \
+    rm -f /tmp/*.whl
