@@ -165,14 +165,14 @@ jobs:
           tag: "$NGC_TAG_VERSION-tf2-py3"
           repo: "tensorflow"
       - overwrite-tag-tf
-      # - push-docker-image
-      # - insert-image-database
-      # - slack/status:
-      #     include_project_field: false
-      #     include_job_number_field: false
-      #     failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-      #     success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-      #     <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+      - push-docker-image
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
 
   push-pytorch-ngc-prev:
     executor: kernel-image-publishing-docker
@@ -189,14 +189,14 @@ jobs:
           tag: "$NGC_TAG_VERSION-py3"
           repo: "torch"
       - overwrite-tag-torch-gpu
-      # - push-docker-image
-      # - insert-image-database
-      # - slack/status:
-      #     include_project_field: false
-      #     include_job_number_field: false
-      #     failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-      #     success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-      #     <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
+      - push-docker-image
+      - insert-image-database
+      - slack/status:
+          include_project_field: false
+          include_job_number_field: false
+          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
+          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
+          <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
 
   push-py38-cpu:
     executor: kernel-image-publishing-docker
@@ -302,7 +302,6 @@ workflows:
             branches:
               only:
                 - main
-                - amelia/trim-gpu
       - push-pytorch-ngc-prev:
           context:
             - quay-creds
@@ -312,7 +311,6 @@ workflows:
             branches:
               only:
                 - main
-                - amelia/trim-gpu
       - push-py311-cpu:
           context:
             - quay-creds
