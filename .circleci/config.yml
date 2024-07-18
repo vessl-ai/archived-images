@@ -4,127 +4,16 @@ orbs:
   slack: circleci/slack@3.4.2
 
 commands:
-  insert-image-database:
-    steps:
-      - run:
-          name: request to aron-backend
-          command: |
-            curl -v -f -X POST https://api.vessl.ai/api/v1/kernels_images/publish_new_managed_image \
-              -H "Authorization: $PROD_KERNEL_IMAGE_PUBLISH_SECRET_KEY" \
-              -H "Content-type: application/json" \
-              -d "{\"image_url\": \"$VERSION_REV_TAG\"}"
-  fetch-py-ver:
-    steps:
-      - run:
-          name: fetch python version
-          command: |
-            PY_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c "python -c 'import sys; print(\".\".join(map(str, sys.version_info[:2])))'")
-            echo "export PY_VER=$PY_VER" >> "$BASH_ENV"
-            source "$BASH_ENV"
-  fetch-tf-ver:
-    steps:
-      - run:
-          name: fetch tensorflow version
-          command: |
-            TF_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c 'pip show tensorflow' | grep -o '^Version: [0-9.]*' | awk '{print $2}')
-            echo "export TF_VER=$TF_VER" >> "$BASH_ENV"
-            source "$BASH_ENV"
-  fetch-cuda-ver:
-    steps:
-      - run:
-          name: fetch cuda version
-          command: |
-            CUDA_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c 'nvcc -V' | grep -o 'release [0-9.]*' | awk '{print $2}')
-            echo "export CUDA_VER=$CUDA_VER" >> "$BASH_ENV"
-            source "$BASH_ENV"
-  fetch-torch-ver:
-    steps:
-      - run:
-          name: fetch pytorch version
-          command: |
-            TORCH_VER=$(sudo docker run --rm $TEMP_TAG /bin/bash -c "python -c 'import torch; print(torch.__version__)'" | grep -o '^[0-9.]*')
-            echo "export TORCH_VER=$TORCH_VER" >> "$BASH_ENV"
-            source "$BASH_ENV"
-  overwrite-tag-tf:
-    steps:
-      - fetch-tf-ver
-      - fetch-cuda-ver
-      - run:
-          name: overwrite tensorflow-gpu version info
-          command: |
-            VERSION_TAG=$TF_VER-cuda$CUDA_VER
-            echo "export VERSION_TAG=$VERSION_TAG" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - fetch-revision-ver:
-          repo: "tensorflow"
-  overwrite-tag-torch-gpu:
-    steps:
-      - fetch-torch-ver
-      - fetch-cuda-ver
-      - run:
-          name: overwrite torch-gpu version info
-          command: |
-            VERSION_TAG=$TORCH_VER-cuda$CUDA_VER
-            echo "export VERSION_TAG=$VERSION_TAG" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - fetch-revision-ver:
-          repo: "torch"
-  overwrite-tag-python-cpu:
-    steps:
-      - fetch-py-ver
-      - run:
-          name: overwrite python-cpu version info
-          command: |
-            VERSION_TAG=$PY_VER
-            echo "export VERSION_TAG=$VERSION_TAG" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - fetch-revision-ver:
-          repo: "python"
-  fetch-revision-ver:
-    parameters:
-      repo:
-        type: string
-    steps:
-      - run:
-          name: fetch revision version
-          command: |
-            suffix=1
-            while true; do
-              response_code=$(curl -s -o /dev/null -w "%{http_code}" "https://quay.io/v2/vessl-ai/<<parameters.repo>>/manifests/$VERSION_TAG-r$suffix")
-              if [[ $response_code != 200 ]]; then
-                break
-              fi
-              suffix=$((suffix + 1))
-            done
-            VERSION_REV_TAG=$QUAY_ACCOUNT_URL/<<parameters.repo>>:$VERSION_TAG-r$suffix
-            echo "export VERSION_REV_TAG=$VERSION_REV_TAG" >> "$BASH_ENV"
-            source "$BASH_ENV"
   push-docker-image:
     steps:
       - run:
           name: docker push
           command: |
-            echo "PUSHED $TEMP_TAG AS $VERSION_REV_TAG"
-            LATEST_TAG=$(echo "$VERSION_REV_TAG" | sed 's/-r[0-9]*$//')
-            docker tag $TEMP_TAG $VERSION_REV_TAG
-            docker tag $TEMP_TAG $LATEST_TAG
-            docker push $VERSION_REV_TAG
-            docker push $LATEST_TAG
+            docker push "${QUAY_ACCOUNT_URL}/tmp:tmp-cuda12.1-torch2.2"
+            docker push "${QUAY_ACCOUNT_URL}/tmp:tmp-cuda12.1-torch2.3"
           no_output_timeout: 1h
 
   build-docker-image:
-    parameters:
-      filename:
-        type: string
-      repo:
-        type: string
-        default: test
-      tag:
-        default: latest
-        type: string
-      path:
-        default: ngc
-        type: string
     steps:
       - setup_remote_docker:
             version: default
@@ -133,15 +22,11 @@ commands:
           name: docker login
           command: docker login -u $QUAY_ACCOUNT_USERNAME -p $QUAY_ACCOUNT_PASSWORD quay.io
       - run:
-          name: store image tag
-          command: |
-            export TAG="$QUAY_ACCOUNT_URL/<<parameters.repo>>:<<parameters.tag>>"
-            echo "export TEMP_TAG=$TAG" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - run:
           name: docker build
           command: |
-            cd ./<<parameters.path>> &&  docker build --build-arg NGC_TAG=<<parameters.tag>> -f Dockerfile.<<parameters.filename>> -t $TEMP_TAG .
+            cd ./cuda
+            docker build -f Dockerfile --target torch-2.2 -t "${QUAY_ACCOUNT_URL}/tmp:tmp-cuda12.1-torch2.2" .
+            docker build -f Dockerfile --target torch-2.3 -t "${QUAY_ACCOUNT_URL}/tmp:tmp-cuda12.1-torch2.3" .
 
 executors:
   kernel-image-publishing-docker:
@@ -150,150 +35,17 @@ executors:
       - image: cimg/base:stable
 
 jobs:
-  push-tf2-ngc-prev:
+  tmp-push-cuda-torch:
     executor: kernel-image-publishing-docker
     steps:
       - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=$(date -d '-1 months' '+%y.%m')" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - build-docker-image:
-          filename: "py3-tf-ngc"
-          tag: "$NGC_TAG_VERSION-tf2-py3"
-          repo: "tensorflow"
-      - overwrite-tag-tf
+      - build-docker-image
       - push-docker-image
-      - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
-
-  push-pytorch-ngc-prev:
-    executor: kernel-image-publishing-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            echo "export NGC_TAG_VERSION=$(date -d '-1 months' '+%y.%m')" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - build-docker-image:
-          filename: "py3-torch-ngc"
-          tag: "$NGC_TAG_VERSION-py3"
-          repo: "torch"
-      - overwrite-tag-torch-gpu
-      - push-docker-image
-      - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n
-          <https://docs.nvidia.com/deeplearning/frameworks/`echo $VERSION_REV_TAG | cut -d "/" -f 3 | cut -d "-" -f2`-release-notes/rel-`echo $NGC_TAG_VERSION | cut -d "." -f 1`-`echo $NGC_TAG_VERSION | cut -d "." -f 2`.html|*See NGC Release Notes*>'
-
-  push-py38-cpu:
-    executor: kernel-image-publishing-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - build-docker-image:
-          filename: "py38"
-          tag: "py38"
-          path: "cpu"
-          repo: "python"
-      - overwrite-tag-python-cpu
-      - push-docker-image
-      - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
-
-  push-py39-cpu:
-    executor: kernel-image-publishing-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - build-docker-image:
-          filename: "py39"
-          tag: "py39"
-          path: "cpu"
-          repo: "python"
-      - overwrite-tag-python-cpu
-      - push-docker-image
-      - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
-
-  push-py310-cpu:
-    executor: kernel-image-publishing-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - build-docker-image:
-          filename: "py310"
-          tag: "py310"
-          path: "cpu"
-          repo: "python"
-      - overwrite-tag-python-cpu
-      - push-docker-image
-      - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
-
-  push-py311-cpu:
-    executor: kernel-image-publishing-docker
-    steps:
-      - checkout
-      - run:
-          name: store variables
-          command: |
-            echo "export DATE=$(date +'%Y%m%d%H%M')" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - build-docker-image:
-          filename: "py311"
-          tag: "py311"
-          path: "cpu"
-          repo: "python"
-      - overwrite-tag-python-cpu
-      - push-docker-image
-      - insert-image-database
-      - slack/status:
-          include_project_field: false
-          include_job_number_field: false
-          failure_message: ':thinking_spin: \``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\` image publishing job has failed \n'
-          success_message: ':blob-cool: <https://$VERSION_REV_TAG|\``echo ${VERSION_REV_TAG} | cut -d "/" -f 3`\`>  image publishing job has succeeded! \n'
 
 workflows: 
   main:
     jobs:
-      - push-tf2-ngc-prev:
+      - tmp-push-cuda-torch:
           context:
             - quay-creds
             - kernel-image-publish-secrets
@@ -301,49 +53,4 @@ workflows:
           filters:
             branches:
               only:
-                - main
-      - push-pytorch-ngc-prev:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - main
-      - push-py311-cpu:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - main
-      - push-py310-cpu:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - main
-      - push-py39-cpu:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - main
-      - push-py38-cpu:
-          context:
-            - quay-creds
-            - kernel-image-publish-secrets
-            - slack-webhook-for-v3-orb
-          filters:
-            branches:
-              only:
-                - main
+                - amelia/cuda
